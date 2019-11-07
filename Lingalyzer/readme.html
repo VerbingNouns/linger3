@@ -1,0 +1,674 @@
+<html>
+<head>
+<title>Linger: Lingalyzer Documentation</title>
+</head>
+<body bgcolor=white>
+<h1>Lingalyzer Documentation</h1>
+<h4>Version 1.4</h4>
+<hr>
+
+<p>
+Lingalyzer is a program to assist in analyzing reading time and question
+answering data gathered using Linger.
+
+<p>
+Lingalyzer requires a Unix-like command-line (terminal) environment in order
+to run.  On Mac OS X, you can use the Terminal and the tools provided with the
+<a href="http://www.apple.com/macosx/technologies/darwin.html">Darwin</a>
+core.  On Windows, you should install <a
+href="http://www.cygwin.com">Cygwin</a>.
+
+<p>
+Lingalyzer uses the <i>regress</i> and <i>anova</i> programs that come with
+the <a href="http://tedlab.mit.edu/~dr/UnixStat/">|STAT package</a>.  It also
+uses <i>gzip</i> and <i>zcat</i>, which are standard with most Unix
+distributions.  Before using Lingalyzer, make sure those programs are on your
+path.
+
+<p>
+You will probably want to create an <i>Analysis</i> directory within your
+experiment directory and run Lingalyzer from there.  Therefore, I will assume
+that the path to the Results directory, which contains the .dat files, is
+../Results.  When working with lingalyzer, it is a good idea to store all of
+the commands in an executable script file, which can be re-run later to
+reproduce all of the analyses if a subject is dropped or added or the
+condition file is changed.
+
+
+<h3>Lingalyzer Tutorial</h3>
+
+The example experiment that comes with Linger, called <a
+href="../Experiments/Example">Example</a>, contains a subdirectory called <a
+href="../Experiments/Example/Analysis">Analysis</a> in which a sample
+Lingalyzer analysis has been prepared.  The Example experiment contains three
+sub-experiments, but the analysis only covers one of them, inter1.
+<p>
+There are four files in the Analysis directory.  <a
+href="../Experiments/Example/Analysis/inter1.cnd">inter1.cnd</a> is the
+condition file, which you can read about in the next section.  <a
+href="../Experiments/Example/Analysis/raw.lpm">raw.lpm</a> and <a
+href="../Experiments/Example/Analysis/res.lpm">res.lpm</a> are Lingrapher
+parameter files that help format the graphs produced by <a
+href="../Lingrapher/readme.html">Lingrapher</a>.
+<p>
+Finally, <a href="../Experiments/Example/Analysis/analyze">analyze</a> is an
+executable script that contains all of the lingalyzer commands used in the
+analysis.  It is well commented and you should read through it and run the
+commands as a tutorial.  You may want to read the corresponding sections of
+this guide as you do so to get more information about each type of analysis.
+When you are ready to analyze your own experiment, you may want to copy the
+example analysis files and modify them.  It will save a lot of time.
+
+
+<h3>Condition Files</h3>
+<p>
+The first command line argument to Lingalyzer is a condition file, which
+normally ends in the extension .cnd.  The condition file describes the
+conditions used in your experiment.  A typical condition file might include
+blocks like these, one for each condition in each experiment that you want to
+analyze:
+
+<pre>
+set COND_NAME      "contrast a"
+set ANOVA_FACTORS  "small white"
+set GRAPH_LABEL    "A) Small White"
+set REGIONS        "1:3-5 2:6 4:7-9"
+addCondition
+
+set COND_NAME      "contrast b"
+set ANOVA_FACTORS  "small black"
+set GRAPH_LABEL    "B) Small Black"
+set REGIONS        "1:3-5 2:foo 3:7 4:8-9"
+addCondition
+</pre>
+
+As of version 1.4, any items for which a condition is not defined in the
+condition file will be ignored in the analyses (although all conditions except
+the practice are used in computing word-length regressions).  Therefore, you
+must define all conditions you are interested in, even for the filler items,
+which normally have condition name "filler -".
+
+<p>
+It is not unusual to use different condition files for different analyses.  If
+an experiment contains two independent sub-experiments, you could create one
+condition file that contains all of the conditions and then use filters (like
+"-f [eq $EXPT E1]") to analyze one at a time.  Or, you can create two
+different condition files, one for each experiment, in which case the filter
+won't be necessary.  You may also want to use multiple condition files to
+carve up the regions in the sentences in different ways.
+
+<p>
+The condition file is actually just a piece of Tcl code that will be executed
+by lingalyzer.  The <tt>addCondition</tt> line actually creates the condition
+using the values set prior to it.  
+
+<tt>COND_NAME</tt> is the name of the condition.  It is
+composed of the name of the experiment followed by a space and the condition
+name.  Remember to enclose the names in quotes or curly braces.
+
+<p>
+<tt>ANOVA_FACTORS</tt> are the factor values represented by the condition.
+For example, imagine that your experiment crosses two factors, color (white or
+black) and size (small or large).  You might have four conditions, the first
+representing the values "white small", the second "white large", the third
+"black small", and the fourth "black large".  The <tt>ANOVA_FACTORS</tt>
+variable is used to indicate which factors correspond to each condition.
+
+<p>
+<tt>GRAPH_LABEL</tt> is simply the user-friendly name for the condition that
+will appear in the legend when Lingrapher is used to generate a graph.  It is
+not actually used by Lingalyzer.
+
+<p>
+<tt>REGIONS</tt> defines how the words in the sentences in each condition
+correspond to regions for analysis.  It consists of a list of region
+specifications.  Each region specification has the region number, followed by
+a colon.  Regions should be numbered starting with 1.
+
+<p>
+After the colon there can be a single word number (2:6) if the region is just
+one word long, or a range of word numbers (4:7-9) if the region spans multiple
+words.  The first word in the sentence is word 1 (not 0).  Alternately, you
+can use a word tag in place of word numbers (2:foo).  The word tag is
+specified in the Linger items file for the purpose of predefining regions.
+Region tags should be used if a region spans different words for different
+sentences in the same condition.
+
+<p>
+Disjoint regions can be defined using multiple specifications, as in 2:4 3:5
+3:7-9 4:10.  If you want a region that runs from word 10 to the end of the
+sentence, however long that may be, just specify a sufficiently large upper
+bound, as in 6:10-99.
+
+<p>
+It may be that certain regions do not appear in some conditions.  For example,
+if your sentences involve sentential complements, you might compare reduced
+and unreduced conditions.  Region 3 might be "that" in the unreduced
+conditions, but absent in the reduced conditions.  This is fine.
+
+<p>
+Any words that are not assigned to a particular region will be considered part
+of region 0.  That is why it is important to start counting the useful regions
+with 1.  It is a good idea to check whether any words fell into region 0
+before conducting your other analyses.
+
+<p>
+If <tt>REGION</tt> is set to the empty string, {}, the default behavior is to
+map each word to its own region.  Word 1 to region 1, word 2 to region 2, etc.
+
+<p>
+Because the condition file is just a Tcl script that will be executed after
+the Lingalyzer code has been run, you can also use it to override any default
+parameters used by Lingalyzer.  These are some of the parameters that might be
+changed:
+
+<pre>
+# Lingalyzer's verbosity.  Increase to help debug errors:
+set Verbosity 1
+# Language encoding of .dat files (same as used in Linger):
+set LangEncoding iso8859-1
+# Experiments ignored when computing residuals:
+set IgnoreExpts {practice}
+# Default filter expression, 1 means nothing gets filtered:
+set Filter 1
+# Default independent variables:
+set Independents {$EXPT $COND $RNUM}
+# Default dependent variables:
+set Dependents   {$RSRT}
+# Subjects with an error rate worse than this are recommended for removal:
+set QuestCutoff 66.666
+# Subjects with avg reading rate over this Z-score are recommended for removal:
+set RateCutoff  2.5
+</pre>
+
+
+<h3>Preprocessing the Subjects</h3>
+<p>
+Before fully analyzing the data, it is a good idea to check that all of the
+subjects meet reasonable performance criteria.  You may wish to discard the
+data from subjects who make too many comprehension errors or are not reading
+in a natural fashion.  Ordinarily, it is a good idea to perform these tests
+only on the filler items that are common to all subjects to prevent indirect
+effects of the different experimental items seen by the subjects.  If you are
+using two experiments as fillers for one another, you may have to perform 
+
+<p>
+To perform some basic tests on the data, run a command like the following:
+<pre>
+lingalyzer contrast.cnd -f '[eq $EXPT filler]' -p ../Results
+</pre>
+
+<p>
+The first argument is the condition file, which isn't actually used in this
+case, but must be specified.  The <tt>-f</tt> option specifies a filter which
+discards unwanted data.  In this case, we are only keeping data from the
+"filler" experiment (the filler items), as is recommended.
+
+<p>
+The final argument must be <tt>-p</tt> followed by the directory in which the
+.dat files are located.
+
+<p>
+Lingalyzer will first report the average question answering correctness rates
+for the subjects, in sorted order.  It will recommend removing any subject
+with fewer than 2/3 correct answers.  You may choose to set the criterion
+wherever you wish.
+
+<p>
+Next, it will calculate the average word reading time for each subject, and
+the mean and standard deviation of these values.  Lingalyzer will recommend
+that any subject whose average word reading rate is over 2.5 std. devs above
+the mean be removed.  Again, you can set your own criterion wherever you wish.
+
+<p>
+When you actually remove the subjects, it is a good idea to create a "Removed"
+subdirectory within the Results directory and move the subjects' .dat files
+there.  This way they will not be in the way, but can always be retrieved.
+
+
+
+<h3>Collecting the Data</h3>
+
+There are two basic steps to analyzing Linger data.  The first is to collect
+the data from the .dat files in the Results directory and perform some initial
+analyses on it, such as computing residuals.  This is done as follows:
+<pre>
+lingalyzer contrast.cnd -c ../Results
+</pre>
+<p>
+Following <tt>-c</tt> is the name of the directory containing the .dat files.
+First Lingalyzer will extract all of the data from the .dat files.  If you
+wish to leave some of the files out of the analysis (because subjects are
+being discarded), it is easiest to create a subdirectory within the Results
+directory and move the unwanted .dat files there.
+
+<p>
+Lingalyzer next computes the question answering correctness percentage for
+each sentence.  If there is just one question asked per sentence, this will be
+either 100 or 0, but it may be different if more questions are asked.
+
+<p>
+It then determines the subject item number for each item.  That is, where did
+the item occur in the sequence of items seen by the subject, counting practice
+and filler items as well as experimental items.
+
+<p>
+Next, Lingalyzer computes the word length/reading time regression equation for
+each subject.  This is done using all of the data except for the practice
+items, which normally have the experiment name "practice".  If you named the
+practice items differently or would like to exclude other items in computing
+the residual, you can change the IgnoreExpts parameter in the condition file.
+
+<p>
+Then Lingalyzer computes the Z-scores for the raw and residual reading times
+for the purpose of later trimming.  The Z-score is the difference between the
+reading time and the mean reading time, divided by the standard deviation.  In
+computing Z-scores, separate means and standard deviations are computed for
+each pairing of experiment, condition, and region.
+
+<p>
+Z-scores are also computed for the question answering times on a per-subject
+basis.  That is, each subject has his or her own mean and standard deviation.
+
+<p>
+Finally, the information is written to two data files, one for reading times
+(.rtm) and one for comprehension questions (.qst).  The files take the base of
+their name from the condition file and are written in compressed format to
+save space.  So a condition file named contrast.cnd will result in the
+creation of the files contrast.rtm.gz and contrast.qst.gz.
+
+
+<h4>The .rtm File</h4>
+<p>
+The columns in the reading time data file, along with their four-letter codes,
+are as follows:
+
+<table>
+<tr><td>1  <td>EXPT: <td>the experiment name
+<tr><td>2  <td>COND: <td>the condition name
+<tr><td>3  <td>ITEM: <td>the item number
+<tr><td>4  <td>SUBJ: <td>the subject number
+<tr><td>5  <td>SBIN: <td>the position of the item in the sequence seen by the subject
+<tr><td>6  <td>WNUM: <td>the word number in the sentence (starting with 1)
+<tr><td>7  <td>WORD: <td>the actual word
+<tr><td>8  <td>RNUM: <td>the region number (0 is the default region)
+<tr><td>9  <td>RWRT: <td>the raw reading time
+<tr><td>10 <td>RWZS: <td>the raw reading time Z-score
+<tr><td>11 <td>RSRT: <td>the residual reading time
+<tr><td>12 <td>RSZS: <td>the residual reading time Z-score
+<tr><td>13 <td>QPCT: <td>the question answering correctness percentage on this sentence
+</table>
+<p>
+Note that the word number in this file starts counting with 1, while the word
+numbers in the .dat files start with 0.
+
+
+<h4>The .qst File</h4>
+<p>
+The columns in the question answering data file are as follows:
+
+<table>
+<tr><td>1  <td>EXPT: <td>the experiment name
+<tr><td>2  <td>COND: <td>the condition name
+<tr><td>3  <td>ITEM: <td>the item number
+<tr><td>4  <td>SUBJ: <td>the subject number
+<tr><td>5  <td>SBIN: <td>the position of the item in the sequence seen by the 
+subject
+<tr><td>6  <td>QTAG: <td>the question tag, which was appended to the ? or ! in
+the items file
+<tr><td>7  <td>QNUM: <td>the question number on this item
+<tr><td>8  <td>QANS: <td>the actual answer given by the subject
+<tr><td>9  <td>QCRC: <td>was the subject's answer correct?
+<tr><td>10  <td>RWRT: <td>the raw reaction time in answering the question
+<tr><td>11  <td>RWZS: <td>the question answering time Z-score
+</table>
+<p>
+The QNUM is only useful if more than one question is asked per item.
+
+
+<h3>Extracting .avg Files</h3>
+<p>
+Once .rtm and .qst files have been created, the second step in using
+Lingalyzer is to extract data from the files to produce reports.  The first
+type of report contains columns with independent variables and then the mean,
+standard error, and number of data points of one or more dependent variables.
+
+<p>
+The <tt>-i</tt> option is used to set the independent variables.  It should be
+followed by an expression that evaluates to a list of independent variable
+values, separated by whitespace.  Ordinarily it will consist of a list of
+four-letter column names enclosed in quotes, with each column name preceded by
+$.  For example, the default expression is '$EXPT $COND $RNUM', which includes
+the experiment, condition, and region number.  A line will appear in the
+resulting .avg file for each pairing of values for these variables.
+
+<p>
+The <tt>-d</tt> option specifies the expression that evaluates to the values
+of the dependent variable or variables.  Normally this will be either '$RWRT',
+'$RSRT', or '$QCRC', although you may want to produce a report containing both
+RWRT and RSRT by enclosing both of these codes in quotes, '$RWRT $RSRT'.  For
+each pairing of values of the independent variables, the mean and stderr of
+the dependent variables will appear in the .avg file.
+
+<p>
+The <tt>-f</tt> option specifies the filter expression which determines which
+data values are included in the analysis and which are ignored.  This is a
+standard Tcl expression that should evaluate to true for any line that should
+be included in the analysis.  It is best to enclose the filter expression in
+single quotes.  The values for the columns for each line are accessed by
+preceding the name of the column with $.  Otherwise, the syntax is largely the
+same as in C and other programming languages.  Here are some examples of
+typical filter expressions:
+
+<p>
+The raw reading time Z-score must be less than 3:
+<pre>
+-f '$RWZS < 3'
+</pre>
+
+<p>
+The raw rt Z-score must be less than 3 and more than -1:
+<pre>
+-f '$RWZS < 3 && $RWZS > -1'
+</pre>
+or
+<pre>
+-f '($RWZS < 3) && ($RWZS > -1)'
+</pre>
+
+<p>
+The region number is 4:
+<pre>
+-f '$RNUM == 4'
+</pre>
+
+<p>
+The experiment is equal to exp1:
+<pre>
+-f '[eq $EXPT exp1]'
+</pre>
+
+<p>
+Note that "a == b" can only be used for numbers.  The "[eq a b]" function
+should be used for comparing strings.
+The condition is not "a":
+<pre>
+-f '![eq $COND a]' </pre>
+
+<p>
+The experiment is either exp1 or exp2 (it is "in" the set):
+<pre>
+-f '[in $EXPT "exp1 exp2"]'
+</pre>
+
+<p>
+The condition begins with AB:
+<pre>
+-f '[sm $COND AB*]'
+</pre>
+
+<p>
+Operators for comparing numbers include <tt><</tt>, <tt>></tt>, <tt><=</tt>,
+<tt>>=</tt>, <tt>==</tt>, and <tt>!=</tt>.  Logical operators include &&
+(and), || (or), and ! (not).
+
+<p>
+Words should not be compared using == and !=.  It is better to use the
+<i>eq</i> or <i>in</i> procedures.  The <i>eq</i> procedure takes two strings
+and returns TRUE if they are identical.  The <i>in</i> procedure takes two
+arguments, a word and a list of words.  It tests if the word is in the list.
+If the second argument contains just one item, this is equivalent to an eq,
+but may be slower.  Note that this procedure must be enclosed in square
+brackets.  For negation, <tt>!</tt> should precede the square brackets.
+
+<p>
+Words can also be compared to glob-like expressions using the "sm" (string
+match) command.  This is used similarly to "in", except that the second
+argument is an expression, rather than a list of words.  The expression can
+contain alphanumeric characters or the special symbols <tt>*</tt> and
+<tt>?</tt>.  <tt>*</tt> matches any string of 0 or more characters.
+<tt>?</tt> matches any single character.
+
+<p>
+The default filter is "1", which does not discard any of the data.
+
+<p>
+Once <tt>-f</tt>, <tt>-i</tt>, and <tt>-d</tt> have been specified, the last
+argument should be either <tt>-r</tt> or <tt>-q</tt>.  The <tt>-r</tt> flag
+causes the analysis to be done on the reading time data and the <tt>-q</tt>
+flag causes the analysis to be done on the question answering data.  Following
+either argument is the name of the output file that will be written.  The
+extension .avg will be added to the file name automatically.  If <tt>-</tt> is
+given in place of the file root, the results will be printed to standard
+output.
+
+<p>
+In the example below, the contrast.cnd condition file is read.  The filter is
+set to include only lines for which the residual Z-score is less than 3.  The
+independent variables are the experiment name, condition name, and region
+numbers.  For each pairing of their values, the mean residual reading time and
+their standard errors will be produced.  The final argument causes the
+analysis to be done on the contrast.rtm file and the results to be written to
+foo.avg.
+
+<pre>
+lingalyzer contrast.cnd -f '$RSZS < 3' -i '$EXPT $COND $RNUM' -d '$RSRT' -r foo
+</pre>
+
+<p>
+The foo.avg file will look something like this:
+
+<pre>
+contrast a 0 -26.431 5.390 1053
+contrast a 1 -58.347 7.272 178
+contrast a 4 -45.261 13.566 176
+contrast a 5 -41.905 13.929 177
+contrast a 6 -14.726 7.909 353
+contrast a 7 -32.069 5.428 707
+...
+contrast d 5 -16.666 15.717 177
+contrast d 6 -6.933 8.012 351
+contrast d 7 -24.336 5.882 708
+contrast d 8 -32.343 15.845 179
+filler a 0 -25.312 0.769 47726
+practice - 0 57.009 4.449 3442
+</pre>
+
+<p>
+In this example, the question answering correctness rate is computed for each
+subject, discarding the practice items:
+
+<pre>
+lingalyzer contrast.cnd -f '![eq $EXPT practice]' -i '$SUBJ' -d '$QCRC' -q bar
+</pre>
+
+<p>
+The bar.avg file will look something like this:
+<pre>
+1 0.894 0.034 85
+2 0.894 0.034 85
+3 0.612 0.053 85
+4 0.882 0.035 85
+5 0.824 0.042 85
+...
+</pre>
+
+
+<h3>Extracting Data</h3>
+
+<p>
+In addition to computing averages over subsets of your data, you may wish to
+simply extract lines or parts of lines from the .rtm or .qst files.  This may
+be useful for checking your filter expression, figuring out why a certain
+average isn't what you expect it to be, or passing the data on to another
+analysis program.
+<p>
+Typically, programs like <i>grep</i> or <i>awk</i> are used in Unix to extract
+lines from a file.  The main advantage of using Lingalyzer over awk to extract
+the lines is that you can refer to columns by name, such as EXPT and SUBJ,
+rather than by number, which is less convenient.
+<p>
+Data extraction is done using similar command-line arguments to those used in
+producing average files.  However, to extract data, the <tt>-e</tt> flag must
+be inserted before <tt>-q</tt> or <tt>-r</tt> flags.  Following <tt>-q</tt> or
+<tt>-r</tt> is the root file name in which the data will be stored (after
+appending the .dat extension).  You can send the data to standard output
+rather than a file by giving the file name "<tt>-</tt>".
+<p>
+Each line produced when extracting data will contain columns based on the
+fields specified in the list of independent (-i) and dependent (-d) variables.
+First the independent variables will be listed in order and then the dependent
+ones.  If the lists of independent and dependent variables are both empty, all
+of the data will be printed.
+<p>
+The following command produces, to standard output, the subject number, item
+number, and question answering correctness and time for all lines that match
+the condition c1 from the file blah.qst:
+<pre>
+lingalyzer blah.cnd -i '$SUBJ $ITEM' -d '$QCRC $RWRT' -f '[eq $COND c1]' \
+    -e -q -
+</pre>
+
+You can also produce formatted output by adding text or formatting information
+to the output in either the independent or dependent variable list.  For
+example, the following query: 
+
+<pre>
+lingalyzer foo.cnd -i 'Subject $SUBJ, Item $ITEM, Word $WNUM,' \
+    -d '[format "Residual: %.1f  Z-score: %.2f" $RSRT $RSZS]' -e -r -
+</pre>
+produces output like the following:
+
+<pre>
+Subject 1, Item 1, Word 13, Residual: 216.0  Z-score: 0.83
+Subject 1, Item 1, Word 14, Residual: -437.3  Z-score: -0.64
+Subject 1, Item 1, Word 15, Residual: -286.3  Z-score: -0.62
+Subject 1, Item 1, Word 16, Residual: 261.2  Z-score: 0.14
+Subject 1, Item 2, Word 1, Residual: -6.5  Z-score: -0.09
+Subject 1, Item 2, Word 2, Residual: 900.7  Z-score: 2.25
+Subject 1, Item 2, Word 3, Residual: 122.5  Z-score: 0.51
+</pre>
+
+
+
+<h3>Computing ANOVAs</h3>
+
+Lingalyzer can also be used to generate data for and run an ANOVA.  This
+relies on the <i>anova</i> program, which is part of the <a
+href="http://www.acm.org/~perlman/stat/">|STAT</a> package.
+<p>
+When performing an ANOVA, the <tt>-f</tt> filter works just the same, but the
+dependent variables, specified with <tt>-d</tt>, must contain exactly one
+field.
+<p>
+The independent variables, specified with <tt>-i</tt>, should contain more
+than one field.  The first field will be the random variable.  Normally this
+is either the subject number (<tt>$SUBJ</tt>) or item number (<tt>$ITEM</tt>).
+The other independent variables are the ANOVA factors, and can include any of
+the standard fields.  There is one additional field that will often be useful,
+<tt>$ANOV</tt>.  If <tt>$ANOV</tt> is included in the list of independent
+variables, it will be replaced with the <tt>ANOVA_FACTORS</tt> given for the
+experiment and condition in the condition file.  This is used when each
+experimental condition represents a particular set of factor values.
+
+<p>
+In order to perform an ANOVA, the <tt>-a</tt> flag must appear prior to the
+<tt>-r</tt> or <tt>-q</tt> flag.  This puts Lingalyzer in "anova mode".
+Following the <tt>-a</tt> is a list of the column headings for the ANOVA.
+These are the factor names that will appear in the report produced by
+<i>anova</i>.  It is most convenient if these names start with different
+letters because
+<i>anova</i> reports interactions by combining the first character of each
+factor name.  When running in anova mode, the file name that follows
+<tt>-r</tt> or <tt>-q</tt> must be a real file name--you can't write to
+standard output.
+<p>
+In this example, an ANOVA is performed on region 4 using the subject number as
+the random variable and the ANOV factors (size and color) as the independent
+factors, with residual reading time as the dependent variable:
+<pre>
+lingalyzer contrast.cnd -f '$RNUM==4' -i '$SUBJ $ANOV' -d '$RSRT' \
+   -a 'subject size color time' -r region4
+</pre>
+
+Two files will be created when this is run.  <i>region4.anv</i> contains the
+data that was fed to <i>anova</i>.  <i>region4.anova</i> contains the output
+of <i>anova</i>.
+
+
+<h3>Pairwise ANOVAs (T-tests)</h3>
+
+An ANOVA tests for main effects and interactions between factors.  However, it
+will not test for individual differences between pairs of conditions.  For
+example, if you had two factors, each with two levels, such as short/tall and
+male/female, it will report the main effects of height and sex and the
+interaction between them, but not the individual comparison of tall women with
+short men.
+<p>
+Lingalyzer provides a mechanism for computing a complete set of pairwise
+ANOVAS, or t-tests, in a single command.  The syntax is the same as for
+running an ANOVA, but instead of the <tt>-a</tt> flag, the <tt>-t</tt> flag is
+used.  The one constraint is that the list of independent variables must have
+exactly two fields.  The first is the random variable, either "$ITEM" or
+"$SUBJ".  The second is a description of the condition or set of factors for
+this data point.  This is most often "$COND".  Each value in this column will
+be paired with every other value and the resulting ANOVAs are written to a
+".pwa" file, which stands for "pairwise ANOVA".
+<p>
+The following example performs a set of pairwise ANOVAs by subject, writing
+the results to "region4.pwa":
+<pre>
+lingalyzer contrast.cnd -f '$RNUM==4' -i '$SUBJ $COND' -d '$RSRT' \
+   -t 'subject condition time' -r region4
+</pre>
+
+
+<h3>Lingalyzer Tricks</h3>
+
+<h4>Testing linear trends</h4>
+
+It is sometimes the case that your conditions form a sequence of expected
+difficulty, like short, medium, and long sentences.  In this case, rather than
+running an ANOVA, it may be more appropriate to test the significance of this
+trend using a regression.  This can be done as follows.
+<p>
+In the condition file, create an array that maps from your condition name to a
+number, for example:
+
+<pre>
+set Length(a) 0
+set Length(b) 1
+set Length(c) 2
+</pre>
+
+Then, instead of using <tt>$COND</tt> as the independent variable, use the
+value stored in this array, which is <tt>$Length($COND)</tt>.  You could
+generate the data and pipe it to the <tt>regress</tt> program for analysis
+like this:
+
+<pre>
+lingalyzer foo.cnd -i '$Length($COND)' -d '$RSRT' -f '$RNUM==6' -e -r - | regress > r6.regress
+</pre>
+
+
+<h4>Combining conditions</h4>
+
+<p>
+You can define a similar array in the condition file to group conditions
+together for reanalysis.  For example, if you want to group condition
+<tt>a</tt> with <tt>b</tt> and <tt>c</tt> with <tt>d</tt>, you could puts this
+in the condition file:
+
+<pre>
+set NewCond(a) AB
+set NewCond(b) AB
+set NewCond(c) CD
+set NewCond(d) CD
+</pre>
+
+Then, when you run lingalyzer, use '$NewCond($COND)' instead of '$COND'.
+
+<p>
+<hr>
+Written by <a href="mailto:dr+linger@tedlab.mit.edu">Doug Rohde</a><br>
+Copyright 2001-2003

@@ -1,0 +1,194 @@
+<html>
+<head>
+<title>Linger: Lingrapher Documentation</title>
+</head>
+<body bgcolor=white>
+<h1>Lingrapher Documentation</h1>
+<h4>Version 1.1</h4>
+<hr>
+
+<p>
+Lingrapher is a graphing program that is designed to produce graphs of reading
+time data acquired using <a href="../readme.html">Linger</a> and analyzed
+using <a href="../Lingalyzer/readme.html">Lingalyzer</a>.  Lingrapher is not
+designed to handle question-answering or any other kind of data, just reading
+times.  It wouldn't be too hard to adapt it for something else, but that
+hasn't been done yet.
+
+<p>
+Lingrapher relies on the <i>xmgrace</i>, or <i>Grace</i>, graphing program,
+which runs on most Unix machines and has been ported to Windows as well.
+Before using Lingrapher, you should <a
+href="http://plasma-gate.weizmann.ac.il/Grace/">download and install
+<i>Grace</i></a>, if it isn't already running on your machine.
+
+<p>
+The next thing you should do is to set your <tt>LINGER_HOME</tt> environment
+variable to the directory which contains linger and the Lingrapher
+subdirectory.  For example:
+<pre>
+export LINGER_HOME=/home/yourid/Linger
+</pre>
+
+
+<h3>Command Line Arguments</h3>
+<p>
+Normally you will want to run Lingrapher in the Analysis subdirectory of your
+experiment directory, rather than from the Lingrapher directory itself.  The
+usage of Lingrapher is as follows:
+<pre>
+lingrapher condition-file avg-file graph-name [lingrapher-param-file]*
+</pre>
+<p>
+There are three mandatory arguments.  The condition-file is the .cnd file that
+is used with Lingalyzer.  It is used by Lingrapher only to get the English
+names for the conditions in order to make the legend of the graph.
+<p>
+The avg-file is the .avg file containing average reading times by conditions
+for each word or region.  It can be produced by Lingalyzer.  The following is
+an example line in a .avg file.
+<pre>
+contrast2 e 1 -16.319 4.02125
+</pre>
+
+The fields are, in order, the experiment, condition, word/region, average
+value, and standard error of the mean.
+<p>
+The third argument to Lingrapher is the base name of the graph that will be
+produced.  Two files will actually be generated.  If the graph-name is "foo",
+then <i>foo.agr</i> and <i>foo.eps</i> files will be produced.  The
+<i>.agr</i> file is a description of the graph that can be loaded by
+<i>xmgrace</i>.  The <i>.eps</i> file is the encapsulated postscript picture
+of that graph, which can be viewed with a postscript viewer, such as
+<i>gv</i>.
+
+
+
+<h3>Lingrapher Parameter Files</h3>
+<p>
+There are several ways you can customize the appearance of the graph.  One is
+by changing parameters using one or more parameter files.  The parameter file
+<i>default.lpm</i>, in the Lingrapher directory, is always read first.  This
+sets some options that control the behavior of Lingrapher.  The
+<i>default.lpm</i> file looks something like this:
+
+<pre>
+# The basic graph parameter file:
+set DefaultGPM $HOME/style1.gpm
+
+# The file describing how different series will appear:
+set DefaultSRS $HOME/color1.srs
+
+# The axis labels:
+set YAxisLabel "Residual Reading Times (ms)"
+set XAxisLabel "Region"
+
+# Labels for the words or regions along the x-axis:
+set XLabels    {The noisy "dog ate" the big/ugly cat on Tuesday}
+
+# Whether to display error bars:
+set ErrorBars  1
+
+# The min and max y-axis values.  If empty, these are set based on the data. 
+set YMin       ""
+set YMax       ""
+
+# The numerical spacing between y-axis labels:
+set YInterval  10
+
+# Extra space on the left and right sides of the graph:
+set XPadLeft   0.5
+set XPadRight  0.5
+
+# The location of the legend:
+set LegendPos  {0.18 0.82}
+</pre>
+
+<p>
+You will probably want to define your own Lingrapher parameter file that
+overrides some of the values in <i>default.lpm</i>.  You can then add one or
+more of these files to the command line arguments and they will be read after
+the <i>default.lpm</i> and will thus be able to override its settings.  For
+example, if you don't want to use colors, you might put this in the file
+<i>bw.lpm</i>:
+
+<pre>
+set DefaultSRS $HOME/black1.srs
+</pre>
+
+Then when you run Lingrapher, add "bw.lpm" to the end of the arguments to get
+black and white output.  Note that $HOME/ refers to the main Lingrapher
+directory.
+
+
+<h3>Graph Parameter Files</h3>
+<p>
+The graph parameter files define the look of the graph and use a format
+recognized by <i>xmgrace</i> (similar to the .agr file).  The
+<tt>DefaultGPM</tt> variable stores the name of the basic graph parameter file.
+The default value is $HOME/style1.gpm.  This file defines all aspects of the
+look of the graph except for how the individual series will appear and except
+for any parameter values overridden later by Lingrapher or by the user.  You
+can choose a different basic style by changing the <tt>DefaultGPM</tt>
+parameter in your .lpm file.
+<p>
+Once you are familiar with <i>xmgrace</i>, the .gpm file should be fairly
+self-explanatory.  The line:
+<pre>
+@    legend box fill color 7
+</pre>
+for example, means that the legend box will be filled with color 7.  If you
+look at the top of the file, you'll see that color 7 is gray.
+<p>
+You can override the values specified in the .gpm file by adding lines to your
+.lpm files.  As long as the line starts with "@" (followed by a space), it
+will be appended to the .gpm file when producing the .agr graph description.
+For example, we may want to change the bw.lpm file, because the previous
+version produced legends with gray backgrounds.  This new version will produce
+legends with white backgrounds because the second line overrides the legend
+fill color:
+<pre>
+set DefaultSRS $HOME/black1.srs
+@ legend box fill color 0
+</pre>
+
+
+<h3>Series Parameter Files</h3>
+
+The bw.lpr file changed the look of the graphs from color to black and white
+because it overrode the <tt>DefaultSRS</tt> variable, which determines which
+series parameter file will be used.  The series parameter file, or .srs file,
+defines how the different series, or lines, will appear.
+<p>
+The lines in the .srs file are like those in the .gpm file, except that they
+don't start with @.  Any line that ends in a simple value specifies a
+parameter that is the same for all series.  For example, in the file
+color1.srs, the line:
+<pre>
+symbol size 0.500000
+</pre>
+indicates that all series will have symbols of size 0.5.  However, any line
+that ends in a list of values, specifies the different values that will be
+used by the different series.  For example, the line:
+<pre>
+line color          {2 4 15 12 11 9 10 5}
+</pre>
+means that the first series has color 2 (red), the second has color 3 (blue),
+and so on.
+<p>
+The color1.srs file distinguishes the series by color and is therefore good
+for presentations.  The black1.srs file distinguishes the series by the line
+style and the shape of the symbols, and is therefore good for written papers.
+<p>
+You may want to define your own .srs file by copying one of these and
+modifying it.  You can then use your file instead of the default one by adding
+a line like:
+<pre>
+set DefaultSRS my.srs
+</pre>
+to a .lpm file and adding that file to the command line.
+
+<p>
+<hr>
+Written by <a href="mailto:dr+linger@tedlab.mit.edu">Doug Rohde</a><br>
+Copyright 2001-2003

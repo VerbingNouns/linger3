@@ -1,0 +1,24 @@
+instruct {Welcome.}
+
+command {The next sentence should be sentence then rating, no question...}
+
+createItem {# practice 1 -
+This_sentence_is_a_practice_sentence_to_help_you_get_used_to_the_format_of_this_task.
+}
+presentItem practice:1:-
+
+command {The next sentence should be sentence then question, then rating...}
+
+createItem {# practice 2 -
+It_was_the_barber_who_shaved_the_chairman_who_the_elderly_hermit_thanked_profusely.
+? Did this sentence make sense? Y
+}
+presentItem practice:2:-
+
+instruct {That's it for the practice.
+
+If you have any questions, ask the experimenter now.
+
+Otherwise, you may begin the experiment.}
+
+command {Here we go...}

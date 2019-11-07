@@ -1,0 +1,13 @@
+puts "<form action=index.cgi method=post>"
+puts "<table border=2 cellpadding=5><tr><td>"
+puts "In this experiment, you will read part of a sentence and your job will
+be to complete the sentence however you like.  There are no right or wrong
+answers.  Type your completion in the entry below the sentence.
+<p>
+Try to write the first thing that comes to mind.  Don't feel
+the need to be witty or creative--we will not be measuring your personality or
+intelligence."
+
+puts "<input type=hidden name=SUBJECT value=\"$Subject\">"
+
+puts "</td></tr></table><p><table>"

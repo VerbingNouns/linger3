@@ -1,0 +1,833 @@
+#!/bin/sh
+# the next line restarts using tclsh \
+exec tclsh "$0" "$@"
+
+set Version 1.4
+
+### Simple procedures
+
+proc eq {a b} {
+  return [string equal $a $b]
+}
+
+proc in {val list} {
+  if {[lsearch $list $val] == -1} {return 0} else {return 1}
+}
+
+proc sm {string pattern} {
+  return [string match $pattern $string]
+}
+
+proc incrA {array index} {
+  upvar 1 $array arr
+  if {![info exists arr($index)]} {
+    set arr($index) 1
+  } else {
+    incr arr($index)
+  }
+}
+
+proc ladd {list value} {
+  upvar 1 $list lst
+  if {![info exists lst] || [lsearch $lst $value] == -1} {
+    lappend lst $value
+  } else {return $lst}
+}
+
+proc laddA {array index value} {
+  upvar 1 $array arr
+  if {![info exists arr($index)] || [lsearch $arr($index) $value] == -1} {
+    lappend arr($index) $value
+  } else {return $arr($index)}
+}
+
+proc getA {array index default} {
+  upvar 1 $array arr
+  if {![info exists arr($index)]} {return $default}
+  return $arr($index)
+}
+
+proc lavg list {
+  set N 0
+  set sum 0.0
+  foreach i $list {
+    if {$i == {}} continue
+    if {![string is double $i]} {set i 0}
+    set sum [expr $sum + $i]
+    incr N
+  }
+  if {$N == 0} {return 0}
+  return [expr $sum / $N];
+}
+
+proc lstddev {list {avg {}}} {
+  set N 0
+  set sum 0.0
+  if {$avg == {}} {set avg [lavg $list]}
+  foreach i $list {
+    if {$i == {}} continue
+    if {![string is double $i]} {set i 0}
+    set d [expr $i - $avg]
+    set sum [expr $sum + $d * $d]
+    incr N
+  }
+  if {$N <= 1} {return 0}
+  return [expr sqrt($sum / ($N - 1))]
+}
+
+proc lstderr {list {avg {}}} {
+  set N [llength $list]
+  if {$N <= 1} {return 0}
+  return [expr [lstddev $list $avg] / sqrt($N)]
+}
+
+proc message {v msg} {
+  global Verbosity
+  if {$Verbosity >= $v} {puts stderr $msg}
+}
+
+proc fatalError msg {
+  puts stderr "lingalyzer error: $msg"
+  exit
+}
+
+proc writeFile file {
+  global LangEncoding
+  set f [open $file "w"]
+  fconfigure $f -encoding $LangEncoding
+  return $f
+}
+
+proc writeZip file {
+  global LangEncoding
+  if {[file ext $file] != ".gz"} {append file ".gz"}
+  set f [open "| gzip > $file" "w"]
+  fconfigure $f -encoding $LangEncoding
+  return $f
+}
+
+proc readFile file {
+  global LangEncoding
+  if {![file readable $file] && [file readable $file.gz]} {append file ".gz"}
+  if {[file ext $file] == ".gz"} {
+    set f [open "| zcat $file" "r"]
+  } else {set f [open $file "r"]}
+  fconfigure $f -encoding $LangEncoding
+  return $f
+}
+
+### Default parameters
+
+# Lingalyzer's verbosity.  Increase to help debug errors:
+set Verbosity 1
+# Language encoding of .dat files:
+set LangEncoding iso8859-1
+# Chinese: big5
+
+# Experiments ignored when computing residuals:
+set IgnoreExpts {practice PRACTICE}
+# Default filter expression, 1 means nothing gets filtered:
+set Filter 1
+# Default independent variables:
+set Independents {$EXPT $COND $RNUM}
+# Default dependent variables:
+set Dependents   {$RSRT}
+# Subjects with an error rate worse than this are recommended for removal:
+set QuestCutoff 66.666
+# Subjects with avg reading rate over this Z-score are recommended for removal:
+set RateCutoff  2.5
+
+# Subject number:
+set DatCol(SUBJ) 0  
+# Experiment name:
+set DatCol(EXPT) 1  
+# Item number:
+set DatCol(ITEM) 2  
+# Condition name:
+set DatCol(COND) 3  
+# Word number (starting with 0)/?tag or !tag for questions:
+set DatCol(WNUM) 4  
+set DatCol(QTAG) 4  
+# Actual word/Actual answer:
+set DatCol(WORD) 5  
+set DatCol(QANS) 5
+# Region name/Was answer correct?:
+set DatCol(REGN) 6
+set DatCol(QCRC) 6
+# Raw reading time:
+set DatCol(RWRT) 7  
+
+# Experiment name:
+set RtmCol(EXPT) 0
+# Condition name:
+set RtmCol(COND) 1
+# Item number:
+set RtmCol(ITEM) 2
+# Subject number:
+set RtmCol(SUBJ) 3
+# Number of item as seen by subject:
+set RtmCol(SBIN) 4
+# Word number (starting with 1):
+set RtmCol(WNUM) 5
+# Actual word
+set RtmCol(WORD) 6
+# Region number (starting with 1):
+set RtmCol(RNUM) 7
+# Raw reading time:
+set RtmCol(RWRT) 8
+# Raw reading time Z score:
+set RtmCol(RWZS) 9
+# Residual reading time:
+set RtmCol(RSRT) 10
+# Residual reading time Z score:
+set RtmCol(RSZS) 11
+# Question correct percentage:
+set RtmCol(QPCT) 12
+
+# Experiment name:
+set QstCol(EXPT) 0  
+# Condition name:
+set QstCol(COND) 1  
+# Item number:
+set QstCol(ITEM) 2  
+# Subject number:
+set QstCol(SUBJ) 3  
+# Number of item as seen by subject:
+set QstCol(SBIN) 4  
+# Question type tag:
+set QstCol(QTAG) 5
+# Question number on the item:
+set QstCol(QNUM) 6
+# The actual answer:
+set QstCol(QANS) 7
+# Correct?:
+set QstCol(QCRC) 8  
+# Question answering time:
+set QstCol(RWRT) 9 
+# Question answering time Z score:
+set QstCol(RWZS) 10
+
+
+### Creating conditions:
+
+set Conditions {}
+
+# The wnum should start counting with 0
+proc residual {val word params} {
+  set a [lindex $params 0]
+  set b [lindex $params 1]
+  return [format "%.2f" [expr $val - ($a * [string length $word] + $b)]]
+}
+
+proc zscore {val mean stddev} {
+  if {$stddev == 0} {return 0}
+  return [format "%.3f" [expr ($val - $mean) / $stddev]]
+}
+
+proc region {expt cond wnum regn} {
+  global CondRegion
+# If no regions were defined, default to wnum + 1:
+  set code "$expt $cond"
+  if ![info exists CondRegion($code)] {return [expr $wnum + 1]}
+# If a tag was used and has associated with a region, use that:
+  set code "$expt $cond $regn"
+  if {$regn != "-" && [info exists CondRegion($code)]} {
+    return $CondRegion($code)
+  } 
+# Otherwise use the word number, mapping to region 0 if not specified:
+  set code "$expt $cond [expr $wnum + 1]"
+  if [info exists CondRegion($code)] {
+    return $CondRegion($code)
+  } else {return 0}
+}
+
+proc parseRegions {cond regions} {
+  global CondRegion
+  if {$regions == {}} return
+# This indicates that regions have been defined:
+  set CondRegion($cond) 1
+  foreach r $regions {
+    set a [split $r :]
+    set region [lindex $a 0]
+    set range  [split [lindex $a 1] -]
+    if {[llength $range] == 1} {
+      set code "$cond $range"
+      set CondRegion($code) $region
+    } elseif {[llength $range] == 2} {
+      set from [lindex $range 0]
+      set to   [lindex $range 1]
+      if {$to < $from} {fatalError "Bad region specification: $r"}
+      for {set i $from} {$i <= $to} {incr i} {
+        set code "$cond $i"
+        set CondRegion($code) $region
+      }
+    } else {fatalError "Bad region specification: $r"}
+  }
+}
+
+proc definedCondition code {
+  global CondRegion
+  return [info exists CondRegion($code)]
+}
+
+proc addCondition {} {
+  global COND_NAME ANOVA_FACTORS GRAPH_LABEL REGIONS
+  global Conditions AnovaFactors Label Regions
+  lappend Conditions $COND_NAME
+  set AnovaFactors($COND_NAME) $ANOVA_FACTORS
+  set Label($COND_NAME) $GRAPH_LABEL
+  parseRegions $COND_NAME $REGIONS
+}
+
+# Create default practice and filler conditions:
+set COND_NAME "practice -"
+set ANOVA_FACTORS ""
+set GRAPH_LABEL "Practice"
+set REGIONS ""
+addCondition
+set COND_NAME "filler -"
+set GRAPH_LABEL "Filler"
+addCondition
+
+### Read the Results directory and write the .qst and .rtm files:
+
+proc collectData dir {
+  global Subjects QstData RTData DatCol Conditions SubjItemNum
+  message 1 "Collecting data from .dat files"
+  set files [glob $dir/*.dat]
+  set Subjects {}
+  set QstData {}
+  set RTData {}
+
+  foreach file $files {lappend Subjects [file root [file tail $file]]}
+  set Subjects [lsort -dictionary $Subjects]
+  foreach s $Subjects {
+    message 2 "$s.dat"
+    set f [readFile $dir/$s.dat]
+    while {[gets $f line] != -1} {
+      message 3 $line
+      if {([string trim $line] == {}) || 
+          [string index $line 0] == "#"} continue
+      if {[llength $line] != 8} {
+	 fatalError "This line in file $s.dat does not have 8 columns:\n$line\n"
+      }
+      foreach i {EXPT COND WNUM} {set $i [lindex $line $DatCol($i)]}
+#     This line caused problems when you want filler items with no condition:
+#      if {[lsearch $Conditions "$EXPT $COND"] == -1} continue
+      set type [string index $WNUM 0]
+      if {$type == "?" || $type == "!" || $type == "%"} {
+	lappend QstData $line
+      } else {
+	lappend RTData $line
+      }
+
+      # Compute the subject item numbers:
+      foreach i {EXPT COND SUBJ ITEM} {set $i [lindex $line $DatCol($i)]}
+      set code "$EXPT $COND $ITEM"
+      if {![info exists last($SUBJ)]} {
+        set last($SUBJ) {}
+        set num($SUBJ) 0
+      }
+      if {$last($SUBJ) != $code} {
+        set code2 "$EXPT $COND $SUBJ $ITEM"
+        set SubjItemNum($code2) [incr num($SUBJ)]
+        set last($SUBJ) $code
+      }
+    }
+    close $f
+  }
+}
+
+proc computeQstRates {} {
+  global QstData DatCol QstRate
+  message 1 "Computing question error rates"
+  set codes {}
+  foreach line $QstData {
+    foreach i {EXPT COND SUBJ ITEM QCRC} {set $i [lindex $line $DatCol($i)]}
+    if {$QCRC == {}} continue
+    set code "$EXPT $COND $SUBJ $ITEM"
+    ladd codes $code
+    laddA QstRate $code $QCRC
+  }
+  foreach code $codes {
+    set QstRate($code) [expr int([lavg $QstRate($code)] * 100)]
+  }
+}
+
+# proc computeSubjItemNums {} {
+#   global DatCol RTData Subjects SubjItemNum
+#   message 1 "Computing subject item numbers"
+#   foreach s $Subjects {set last($s) {}; set num($s) 0}
+#   foreach line $RTData {
+#     foreach i {EXPT COND SUBJ ITEM} {set $i [lindex $line $DatCol($i)]}
+#     set code "$EXPT $COND $ITEM"
+#     if {$last($SUBJ) != $code} {
+#       set code2 "$EXPT $COND $SUBJ $ITEM"
+#       set SubjItemNum($code2) [incr num($SUBJ)]
+#       set last($SUBJ) $code
+#     }
+#   }
+# }
+
+proc computeRegressions {} {
+  global RTData Subjects DatCol IgnoreExpts Regress TempFile
+  message 1 "Computing word length regressions"
+  foreach line $RTData {
+    foreach i {EXPT SUBJ WORD RWRT} {set $i [lindex $line $DatCol($i)]}
+    if [in $EXPT $IgnoreExpts] continue
+    lappend subjdat($SUBJ) "$RWRT [string length $WORD]"
+  }
+  foreach s $Subjects {
+    if {![info exists subjdat($s)]} continue
+    set f [writeFile $TempFile]
+    foreach i $subjdat($s) {puts $f $i}
+    close $f
+    exec regress -e < $TempFile
+    set f [readFile regress.eqn]
+    gets $f; gets $f line
+    close $f
+    exec rm -f $TempFile regress.eqn
+    set a [string trimright [lindex $line 2] )]
+    set b [lindex $line 4]
+    set Regress($s) "$a $b"
+  }
+}
+
+proc computeStdDevs {} {
+  global IgnoreExpts RTData Subjects DatCol CondRegion Regress QstData
+  global RWRTAvg RWRTStdDev RSRTAvg RSRTStdDev
+  message 1 "Computing standard deviations"
+  set codes {}
+  foreach line $RTData {
+    foreach i {EXPT COND SUBJ WORD WNUM RWRT REGN} {
+      set $i [lindex $line $DatCol($i)]
+    }
+#    if [in $EXPT $IgnoreExpts] continue
+    set RNUM [region $EXPT $COND $WNUM $REGN]
+    set code "$EXPT $COND $RNUM"
+    ladd codes $code
+    lappend rawrts($code) $RWRT
+    lappend resrts($code) [residual $RWRT $WORD $Regress($SUBJ)]
+  }
+  foreach c $codes {
+    set avg [lavg $rawrts($c)]
+    set RWRTAvg($c)    [format "%.2f" $avg]
+    set RWRTStdDev($c) [format "%.2f" [lstddev $rawrts($c) $avg]]
+    set avg [lavg $resrts($c)]
+    set RSRTAvg($c)    [format "%.2f" $avg]
+    set RSRTStdDev($c) [format "%.2f" [lstddev $resrts($c) $avg]]
+#    puts "$RWRTAvg($c) $RWRTStdDev($c) $RSRTAvg($c) $RSRTStdDev($c)"
+  }
+
+  set subjects {}
+  foreach line $QstData {
+    foreach i {SUBJ RWRT} {set $i [lindex $line $DatCol($i)]}
+    ladd subjects $SUBJ
+    lappend rawrts($SUBJ) $RWRT
+  }
+  foreach s $subjects {
+    set avg [lavg $rawrts($s)]
+    set RWRTAvg($s)    [format "%.2f" $avg]
+    set RWRTStdDev($s) [format "%.2f" [lstddev $rawrts($s) $avg]]
+#    puts "$s $RWRTAvg($s) $RWRTStdDev($s)"
+  }
+}
+
+proc writeRtmFile file {
+  global RTData SubjItemNum DatCol Regress RWRTAvg RWRTStdDev RSRTAvg \
+      RSRTStdDev QstRate
+  message 1 "Writing reading time data file $file.gz"
+  set f [writeZip $file]
+  foreach line $RTData {
+    foreach i {EXPT COND ITEM SUBJ WNUM WORD QCRC RWRT REGN} {
+      set $i [lindex $line $DatCol($i)]
+    }
+# Only store data for defined conditions:
+    if {![definedCondition "$EXPT $COND"} continue
+
+    set code "$EXPT $COND $SUBJ $ITEM"
+    set SBIN $SubjItemNum($code)
+    set RNUM [region $EXPT $COND $WNUM $REGN]
+    set QPCT [getA QstRate $code 100]
+    set code "$EXPT $COND $RNUM"
+    set RWZS [zscore $RWRT $RWRTAvg($code) $RWRTStdDev($code)]
+    set RSRT [residual $RWRT $WORD $Regress($SUBJ)]
+    set RSZS [zscore $RSRT $RSRTAvg($code) $RSRTStdDev($code)]
+    set WNUM [expr $WNUM + 1]
+    puts $f "$EXPT $COND $ITEM $SUBJ $SBIN $WNUM $WORD $RNUM $RWRT $RWZS $RSRT $RSZS $QPCT"
+  }
+  close $f
+} 
+
+proc writeQstFile file {
+  global QstData SubjItemNum DatCol RWRTAvg RWRTStdDev
+  message 1 "Writing question data file $file.gz"
+  set f [writeZip $file]
+  set last {}
+  foreach line $QstData {
+    foreach i {EXPT COND SUBJ ITEM QTAG QANS QCRC RWRT} {
+      set $i [lindex $line $DatCol($i)]
+    }
+# Only store data for defined conditions:
+    if {![definedCondition "$EXPT $COND"]} continue
+
+    set code "$EXPT $COND $SUBJ $ITEM"
+    set SBIN $SubjItemNum($code)
+## I now leave the QTAG as it was to distinguish ?, !, and %
+#    set QTAG [string range $QTAG 1 end]
+#    if {$QTAG == {}} {set QTAG "-"}
+    if {$last == $code} {incr QNUM} else {set QNUM 1}
+    set RWZS [zscore $RWRT $RWRTAvg($SUBJ) $RWRTStdDev($SUBJ)]
+    puts $f "$EXPT $COND $ITEM $SUBJ $SBIN $QTAG $QNUM \"$QANS\" \"$QCRC\" $RWRT $RWZS"
+    set last $code
+  }
+  close $f
+} 
+
+proc compileData dir {
+  global FileRoot
+  collectData $dir
+  computeQstRates
+  computeRegressions
+  computeStdDevs
+
+  writeRtmFile $FileRoot.rtm
+  writeQstFile $FileRoot.qst
+}
+
+### Preprocess .dat files to look for bad subjects
+
+proc rsortCol2 {a b} {
+  set av [lindex $a 1]; set bv [lindex $b 1]
+  return [expr ($av >= $bv) ? -1 : 1]
+}
+
+proc sortCol2 {a b} {
+  set av [lindex $a 1]; set bv [lindex $b 1]
+  return [expr ($av >= $bv) ? 1 : -1]
+}
+
+proc checkQuestionPercentage {} {
+  global Subjects QstData DatCol Filter QuestCutoff
+  foreach s $Subjects {set sum($s) 0; set n($s) 0}
+  foreach line $QstData {
+    foreach i {SUBJ EXPT ITEM COND WNUM QANS QCRC RWRT} \
+	{global $i; set $i [lindex $line $DatCol($i)]}
+    if {$QCRC == {}} continue
+    if [uplevel \#0 "expr $Filter"] {
+      set sum($SUBJ) [expr $sum($SUBJ) + $QCRC]
+      incr n($SUBJ)
+    }
+  }
+  set pairs {}
+  foreach s $Subjects {
+    if {$n($s) == 0} continue
+    if {$sum($s) == 0} {lappend pairs "$s 0"} \
+    else {lappend pairs "$s [expr double($sum($s)) / $n($s)]"}
+  }
+  set pairs [lsort -command rsortCol2 $pairs]
+  set bad {}
+  puts "Percentage correct answers:"
+  foreach p $pairs {
+    set v [expr [lindex $p 1] * 100]
+    puts [format "%3s) %.2f%%" [lindex $p 0] $v]
+    if {$v < $QuestCutoff} {set bad "[lindex $p 0] $bad"}
+  }
+  if {[llength $bad] == 0} {set bad "<none>"}
+  puts "I recommend removing these subjects based on error rate:\n$bad"
+}
+
+proc checkReadingTime {} {
+  global Subjects RTData DatCol Filter RateCutoff
+  foreach s $Subjects {set sum($s) 0; set n($s) 0}
+  foreach line $RTData {
+    foreach i {SUBJ EXPT ITEM COND WNUM WORD REGN RWRT} \
+	{global $i; set $i [lindex $line $DatCol($i)]}
+    if [uplevel \#0 "expr $Filter"] {
+      set sum($SUBJ) [expr $sum($SUBJ) + $RWRT]
+      incr n($SUBJ)
+    }
+  }
+  set pairs {}; set means {}
+  foreach s $Subjects {
+    if {$n($s) == 0} continue
+    if {$sum($s) == 0} {set v 0} else {set v [expr $sum($s) / $n($s)]}
+    lappend pairs "$s $v"
+    lappend means $v
+  }
+  set mean [lavg $means]
+  set stddev [lstddev $means $mean]
+  set pairs [lsort -command sortCol2 $pairs]
+  set bad {}
+  puts [format "Global average reading time:        %.1f" $mean]
+  puts [format "Standard deviation of the averages: %.1f" $stddev]
+  puts "Average reading times and z-scores:"
+  foreach p $pairs {
+    set v [lindex $p 1]
+    set z [zscore $v $mean $stddev]
+    puts [format "%3s) %4d %.2f" [lindex $p 0] $v $z]
+    if {$z > $RateCutoff} {set bad "[lindex $p 0] $bad"}
+  }
+  if {[llength $bad] == 0} {set bad "<none>"}
+  puts "You may want to remove these subjects based on reading rate:\n$bad"
+}
+
+### Producing .avg files:
+
+# This just extracts the lines matching the filter.
+proc extractData {outputFile ext cols} {
+  global Filter FileRoot Independents Dependents AnovaFactors ANOV
+  upvar #0 $cols Cols
+  message 1 "Analyzing data in $FileRoot.$ext"
+  if {$outputFile != "-"} {
+    message 1 "Writing extracted data to $outputFile.dat"
+  }
+  if {[llength $Independents] == 0 && [llength $Dependents] == 0} {
+    set printAll 1
+  } else {set printAll 0}
+  set f [readFile $FileRoot.$ext]
+  if {$outputFile == "-"} {set o stdout} \
+  else {set o [writeFile $outputFile.dat]}
+  while {[gets $f line] != -1} {
+    foreach i [array names Cols] {global $i; set $i [lindex $line $Cols($i)]}
+    set code "$EXPT $COND"
+    if {![definedCondition $code]} continue
+    if [uplevel \#0 "expr $Filter"] {
+      set ANOV $AnovaFactors($code)
+      if $printAll {
+        puts $o $line
+      } else {
+        set data [uplevel \#0 {subst "$Independents $Dependents"}]
+        puts $o [string trim $data]
+      }
+    }
+  }
+  if {$o != "stdout"} {close $o}
+}
+
+proc analyzeAnova {outputFile ext cols} {
+  global Filter FileRoot Independents Dependents AnovaLabels AnovaFactors ANOV
+  upvar #0 $cols Cols
+  message 1 "Analyzing data in $FileRoot.$ext"
+  message 1 "Writing anova data to $outputFile.anv"
+  if {[llength $Independents] == 0} {
+    fatalError "No independent variables specified."}
+  if {[llength $Dependents] != 1} {
+    fatalError "You must have one dependent variable for an anova."}
+  set f [readFile $FileRoot.$ext]
+  set o [writeFile $outputFile.anv]
+  while {[gets $f line] != -1} {
+    foreach i [array names Cols] {global $i; set $i [lindex $line $Cols($i)]}
+    set code "$EXPT $COND"
+    if {![definedCondition $code]} continue
+    if [uplevel \#0 "expr $Filter"] {
+      set ANOV $AnovaFactors($code)
+      set data [uplevel \#0 {subst "$Independents $Dependents"}]
+      puts $o [string trim $data]
+    }
+  }
+  close $o
+  close $f
+  message 1 "Running anova on $outputFile.anv, storing in $outputFile.anova"
+  eval exec anova $AnovaLabels < $outputFile.anv > $outputFile.anova
+}
+
+# This does paired anovas, which aren't necessarily t-tests.
+proc analyzeTtest {outputFile ext cols} {
+  global Filter FileRoot Independents Dependents AnovaLabels AnovaFactors \
+      ANOV TempFile
+
+  upvar #0 $cols Cols
+  message 1 "Analyzing data in $FileRoot.$ext"
+  message 1 "Computing pairwise anovas, writing output to $outputFile.pwa"
+  if {[llength $Independents] != 2} {
+    fatalError "The independent variables must contain one random variable and one factor."}
+  if {[llength $Dependents] != 1} {
+    fatalError "You must have one dependent variable for a ttest."}
+  set Random [lindex $Independents 0]
+  set Factor [lindex $Independents 1]
+  set Depend $Dependents
+  set Factors {}
+  set f [readFile $FileRoot.$ext]
+  set i 1
+  while {[gets $f line] != -1} {
+    foreach v [array names Cols] {global $v; set $v [lindex $line $Cols($v)]}
+    set code "$EXPT $COND"
+    if {![definedCondition $code]} continue
+    if [uplevel \#0 "expr $Filter"] {
+      set ANOV $AnovaFactors($code)
+      set fact [uplevel \#0 "subst \"$Factor\""]
+      ladd Factors $fact
+      lappend Data($fact) [uplevel \#0 "subst \"$Random $fact $Depend\""]
+      incr i
+    }
+  }
+  set Factors [lsort -dictionary $Factors]
+  set n [llength $Factors]
+  catch {exec rm -f $outputFile.pwa}
+
+  for {set i 0} {$i < $n} {incr i} {
+    set fi [lindex $Factors $i]
+    for {set j [expr $i + 1]} {$j < $n} {incr j} {
+      set fj [lindex $Factors $j]
+      message 1 "$fi $fj"
+      exec echo "----------------------------------------------------------------------------" >> $outputFile.pwa
+      exec echo "Pairwise Anova of Conditions $fi and $fj:\n" >> $outputFile.pwa
+      set anova [writeFile $TempFile]
+      foreach d $Data($fi) {puts $anova $d}
+      foreach d $Data($fj) {puts $anova $d}
+      close $anova
+      eval exec anova $AnovaLabels < $TempFile >> $outputFile.pwa
+    }
+  }
+  exec rm $TempFile
+}
+
+# This sorts by columns, but if neighboring columns form a condition name, it
+# sorts by the order in which the conditions were defined.
+proc columnSort {a b} {
+  global Conditions
+  set al [llength $a]; set bl [llength $b]
+  for {set i 0} {$i < $al && $i < $bl} {incr i} {
+    set ap [lrange $a $i [expr $i + 1]]
+    set bp [lrange $b $i [expr $i + 1]]
+    set ac [lsearch $Conditions $ap]
+    set bc [lsearch $Conditions $bp]
+    if {$ac != -1 && $bc != -1} {
+      set v [expr $ac - $bc]
+      incr i
+    } else {
+      set ai [lindex $a $i]; set bi [lindex $b $i]
+      if {[string is double $ai] && [string is double $bi]} {
+        set v [expr $ai - $bi]
+      } else {set v [string compare $ai $bi]}
+    }
+    if {$v != 0} {return $v}
+  }
+  return [expr $al - $bl]
+}
+
+# This produces the average time per word in the independent variable set.
+proc analyzeAverages {outputFile ext cols} {
+  global Filter FileRoot Independents Dependents AnovaFactors ANOV
+  upvar #0 $cols Cols
+  message 1 "Analyzing data in $FileRoot.$ext"
+  if {[llength $Independents] == 0} {
+    fatalError "No independent variables specified."}
+  if {[llength $Dependents] == 0} {
+    fatalError "No dependent variables specified."}
+  set Indeps {}
+  set f [readFile $FileRoot.$ext]
+  while {[gets $f line] != -1} {
+    foreach i [array names Cols] {global $i; set $i [lindex $line $Cols($i)]}
+    set code "$EXPT $COND"
+    if {![definedCondition $code]} continue
+    if [uplevel \#0 "expr $Filter"] {
+      set ANOV $AnovaFactors($code)
+      set indep [uplevel \#0 {subst "$Independents"}]
+      ladd Indeps $indep
+      foreach d $Dependents {
+	set code "$indep $d"
+	set dv [uplevel \#0 "subst \"$d\""]
+	lappend Data($code) $dv
+      }
+    }
+  }
+  close $f
+  if {$outputFile != "-"} {
+    message 1 "Writing file $outputFile.avg"
+  }
+  if {$outputFile == "-"} {set f stdout} \
+  else {set f [writeFile $outputFile.avg]}
+  set Indeps [lsort -command columnSort $Indeps]
+  foreach indep $Indeps {
+    set line $indep
+    foreach d $Dependents {
+      set code "$indep $d"
+      set avg [lavg $Data($code)]
+      set err [lstderr $Data($code) $avg]
+      set num [llength $Data($code)]
+      append line [format " %.3f %.3f %d" $avg $err $num]
+    }
+    puts $f $line
+  }
+  if {$f != "stdout"} {close $f}
+}
+
+proc doAnalysis {outputFile ext cols} {
+  global Mode
+  if {$Mode == "ttest"} {
+    analyzeTtest $outputFile $ext $cols
+  } elseif {$Mode == "anova"} {
+    analyzeAnova $outputFile $ext $cols
+  } elseif {$Mode == "extract"} {
+    extractData $outputFile $ext $cols
+  } else {
+    analyzeAverages $outputFile $ext $cols
+  }
+}
+
+### Command-line arguments:
+
+proc usage {} {
+  global Version
+  puts "                 Lingalyzer version $Version"
+  puts {Usage:}
+  puts {lingalyzer condition-file [options]}
+  puts {   -c directory  Collects the .dat files in a Results dir.}
+  puts {   -f filter     Sets the data filtering function.}
+  puts {   -i fields     Sets the independent fields of interest.}
+  puts {   -d fields     Sets the dependent values to be averaged.}
+  puts {   -a labels     Turns on anova mode and sets labels.}
+  puts {   -t            Runs pairwise ttests on a set of conditions.}
+  puts {   -e            Turns on extract mode, giving the data instead of averages.}
+  puts {   -r file_root  Analyzes rtm data and writes to a file.}
+  puts {   -q file_root  Analyzes qst data and writes to a file.}
+  puts {   -p directory  Preprocesses the .dat files to find bad subjects.}
+  puts {   -v level      Sets the verbosity level (default=1).}
+}
+
+if {[llength $argv] < 2} {usage; exit}
+set CondFile   [lindex $argv 0]
+set FileRoot   [file root $CondFile]
+if {$tcl_platform(platform) == "windows"} {
+  set TempFile "C:\Windows\Temp\ling[pid]"
+} else {
+  set TempFile "/tmp/ling[pid]"
+}
+set Mode averages
+source $CondFile
+
+for {set i 1} {$i < $argc} {incr i} {
+  set flag [lindex $argv $i]
+  if {$flag == "-c"} {
+    compileData [lindex $argv [incr i]]
+  } elseif {$flag == "-f"} {
+    set Filter [lindex $argv [incr i]]
+  } elseif {$flag == "-i"} {
+    set Independents [lindex $argv [incr i]]
+  } elseif {$flag == "-d"} {
+    set Dependents [lindex $argv [incr i]]
+  } elseif {$flag == "-a"} {
+    set Mode anova
+    set AnovaLabels [lindex $argv [incr i]]
+  } elseif {$flag == "-t"} {
+    set Mode ttest
+    set AnovaLabels [lindex $argv [incr i]]
+  } elseif {$flag == "-e"} {
+    set Mode extract
+  } elseif {$flag == "-r"} {
+    doAnalysis [lindex $argv [incr i]] rtm RtmCol
+  } elseif {$flag == "-q"} {
+    doAnalysis [lindex $argv [incr i]] qst QstCol
+  } elseif {$flag == "-p"} {
+    set dir [lindex $argv [incr i]]
+    collectData $dir
+    checkQuestionPercentage
+    checkReadingTime
+  } elseif {$flag == "-v"} {
+    set Verbosity [lindex $argv [incr i]]
+  } else {
+    usage; exit
+  }
+}

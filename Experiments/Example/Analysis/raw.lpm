@@ -1,0 +1,16 @@
+#set YMin 300
+set YMax 410
+set YInterval 20
+set YAxisLabel "Raw Reading Times (ms)"
+set XLabels    {
+    {The cop\nThe cop's\nThe cop\nThe cop's}
+    {suspected\nsuspicion\nsuspected\nsuspicion}
+    {\n\nthat the N}
+    {\n\nwhich the N}
+    {\n\nwith a N PP}
+    {\n\nran}
+    {\n\nhad advertised falsely}
+    {\n\n...}
+}
+ 
+@    xaxis ticklabel char size 0.65

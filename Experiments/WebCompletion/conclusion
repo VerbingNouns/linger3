@@ -1,0 +1,2 @@
+puts {<tr><td><td><br><input type=submit value="Submit the Survey"></table>}
+puts "</form>"

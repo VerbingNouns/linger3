@@ -1,0 +1,47 @@
+line linestyle      {1 3 1 3 1 3 1 3}
+line linewidth      {2.0 2.0 2.0 2.0 2.0 2.0 2.0 2.0 2.0}
+line color          {1 1 1 1 1 1 1 1}
+symbol              {1 1 2 2 3 3 4 4}
+symbol color        {1 1 1 1 1 1 1 1}
+symbol pattern      {1 1 1 1 1 1 1 1}
+symbol fill color   {1 0 1 0 1 0 1 0}
+symbol fill pattern {1 1 1 1 1 1 1 1}
+errorbar color      {1 1 1 1 1 1 1 1}
+hidden false
+symbol size 0.500000
+symbol linewidth 1.0
+symbol linestyle 1
+symbol char 65
+symbol char font 0
+symbol skip 0
+line type 1
+line pattern 1
+baseline type 0
+baseline off
+dropline off
+fill type 0
+fill rule 0
+fill color 1
+fill pattern 1
+avalue off
+avalue type 2
+avalue char size 1.000000
+avalue font 0
+avalue color 1
+avalue rot 0
+avalue format general
+avalue prec 3
+avalue prepend ""
+avalue append ""
+avalue offset 0.000000 , 0.000000
+errorbar on
+errorbar place both
+errorbar pattern 1
+errorbar size 1.000000
+errorbar linewidth 1.0
+errorbar linestyle 1
+errorbar riser linewidth 1.0
+errorbar riser linestyle 1
+errorbar riser clip off
+errorbar riser clip length 0.100000
+comment ""

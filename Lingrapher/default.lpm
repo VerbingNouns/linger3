@@ -1,0 +1,29 @@
+# The basic graph parameter file:
+set DefaultGPM $HOME/style1.gpm
+
+# The file describing how different series will appear:
+set DefaultSRS $HOME/color1.srs
+
+# The axis labels:
+set YAxisLabel "Residual Reading Times (ms)"
+set XAxisLabel "Region"
+
+# Labels for the words or regions along the x-axis:
+set XLabels    {The noisy "dog ate" the big/ugly cat on Tuesday}
+
+# Whether to display error bars:
+set ErrorBars  1
+
+# The min and max y-axis values.  If empty, these are set based on the data. 
+set YMin       ""
+set YMax       ""
+
+# The numerical spacing between y-axis labels:
+set YInterval  100
+
+# Extra space on the left and right sides of the graph:
+set XPadLeft   0.5
+set XPadRight  0.5
+
+# The location of the legend:
+set LegendPos  {0.18 0.82}

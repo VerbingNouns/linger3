@@ -1,0 +1,138 @@
+# This file contains all of the commands used to analyze the inter1
+# experiment.  It is a good idea to store a record of every analysis command
+# that you run.  Anything in this file that is not a command should be
+# commented out, like this text is, so that you can simply run this file as an
+# executable script to run all of the analyses.  To make this file executable,
+# run this command:
+# > chmod a+x analyze
+
+# This first command checks for bad subjects, using only the data from the
+# filler items and other experiments.  You may want to replace any subjects
+# with very low question answering performance or very slow reading times.  To
+# replace a subject, move his or her .dat file to a backup location and re-run
+# a new subject using the same subject number.  The reason for using the same
+# subject number is that the same items will be chosen, so your conditions
+# should remain balanced.  In this example, we won't bother to discard the bad
+# subjects.
+lingalyzer inter1.cnd -f '![in $EXPT "practice inter1"]' -p ../Results
+
+# This command collects the data from the .dat files, computes various
+# statistics, and generates a .rtm and a .qst summary file, which are
+# compressed:
+lingalyzer inter1.cnd -c ../Results
+
+# This checks for any words that were not included in any conditions.  Any
+# results will be printed to standard output.  If there are results, you may
+# need to fix the region definitions in the .cnd file:
+lingalyzer inter1.cnd -i '$EXPT $ITEM $COND' -d '$WNUM $WORD' -f '[eq $EXPT inter1] && $RNUM==0' -e -r -
+
+
+############################ READING TIME GRAPHS ##############################
+
+# This compiles the average raw reading times for each condition and region
+# without trimming any data and graphs the results using lingrapher.  It will
+# produce an encapsulated postscript file called raw-notr.eps which can be
+# viewed with gv, if available.  It will also produce an xmgrace file called
+# raw-notr.agr.  This can be opened using xmgrace if you want to modify the
+# graph or generate images in other formats, such as jpg.
+lingalyzer inter1.cnd -i '$EXPT $COND $RNUM' -d '$RWRT' -f '[eq $EXPT inter1]' -r raw-notr
+lingrapher inter1.cnd raw-notr.avg raw-notr raw.lpm
+
+# Generates a raw reading time graph using trimmed data:
+lingalyzer inter1.cnd -i '$EXPT $COND $RNUM' -d '$RWRT' -f '[eq $EXPT inter1] && $RWZS < 4' -r raw-trim
+lingrapher inter1.cnd raw-trim.avg raw-trim raw.lpm
+
+# Generates a residual reading time graph using un-trimmed data:
+lingalyzer inter1.cnd -i '$EXPT $COND $RNUM' -d '$RSRT' -f '[eq $EXPT inter1]' -r res-notr
+lingrapher inter1.cnd res-notr.avg res-notr res.lpm
+ 
+# Generates a residual reading time graph using trimmed data:
+lingalyzer inter1.cnd -i '$EXPT $COND $RNUM' -d '$RSRT' -f '[eq $EXPT inter1] && $RSZS < 4' -r res-trim
+lingrapher inter1.cnd res-trim.avg res-trim res.lpm
+
+
+###################### STATISTICS ON THE WHOLE SENTENCE #######################
+
+# To get average trimmed raw RTs on the whole sentence (produces raw-whole.avg):
+lingalyzer inter1.cnd -i '$COND' -d '$RWRT' -f '[eq $EXPT inter1] && $RWZS < 4' -r raw-whole
+
+# To compute an ANOVA by subjects on the average trimmed raw RTs on the whole
+# sentence (produces raw-whole-s.anv and raw-whole-s.anova):
+lingalyzer inter1.cnd -i '$SUBJ $ANOV' -d '$RWRT' -a 'subject type length raw' -f '[eq $EXPT inter1] && $RWZS < 4' -r raw-whole-s
+
+# To compute pairwise T-tests for every pair of conditions on the average
+# trimmed raw RTs on the whole sentence (produces raw-whole-s.pwa):
+lingalyzer inter1.cnd -i '$SUBJ $COND' -d '$RWRT' -t 'subject condition raw' -f '[eq $EXPT inter1] && $RWZS < 4' -r raw-whole-s
+
+# Raw RT ANOVAs and pairwise T-tests by items (produces raw-whole-i.anv,
+# raw-whole-i.anova, and raw-whole-i.pwa):
+lingalyzer inter1.cnd -i '$ITEM $ANOV' -d '$RWRT' -a 'item type length raw' -f '[eq $EXPT inter1] && $RWZS < 4' -r raw-whole-i
+lingalyzer inter1.cnd -i '$ITEM $COND' -d '$RWRT' -t 'item condition raw' -f '[eq $EXPT inter1] && $RWZS < 4' -r raw-whole-i
+
+# To get average trimmed residual RTs on the whole sentence (produces res-whole.avg):
+lingalyzer inter1.cnd -i '$COND' -d '$RSRT' -f '[eq $EXPT inter1] && $RSZS < 4' -r res-whole
+
+# Residual RT ANOVAs and pairwise T-tests by subjects (produces
+# res-whole-s.anv, res-whole-s.anova, res-whole-s.pwa):
+lingalyzer inter1.cnd -i '$SUBJ $ANOV' -d '$RSRT' -a 'subject type length resid' -f '[eq $EXPT inter1] && $RSZS < 4' -r res-whole-s
+lingalyzer inter1.cnd -i '$SUBJ $COND' -d '$RSRT' -t 'subject condition resid' -f '[eq $EXPT inter1] && $RSZS < 4' -r res-whole-s
+
+# Residual RT ANOVAs and pairwise T-tests by items (produces
+# res-whole-i.anv, res-whole-i.anova, res-whole-i.pwa):
+lingalyzer inter1.cnd -i '$ITEM $ANOV' -d '$RSRT' -a 'item type length resid' -f '[eq $EXPT inter1] && $RSZS < 4' -r res-whole-i
+lingalyzer inter1.cnd -i '$ITEM $COND' -d '$RSRT' -t 'item condition resid' -f '[eq $EXPT inter1] && $RSZS < 4' -r res-whole-i
+
+
+########################### STATISTICS ON REGION 6 ############################
+
+# Averages, ANOVAS, T-tests on raw data:
+lingalyzer inter1.cnd -i '$COND' -d '$RWRT' -f '[eq $EXPT inter1] && $RWZS < 4 && $RNUM==6' -r raw-r6
+lingalyzer inter1.cnd -i '$SUBJ $ANOV' -d '$RWRT' -a 'subject type length raw' -f '[eq $EXPT inter1] && $RWZS < 4 && $RNUM==6' -r raw-r6-s
+lingalyzer inter1.cnd -i '$SUBJ $COND' -d '$RWRT' -t 'subject condition raw' -f '[eq $EXPT inter1] && $RWZS < 4 && $RNUM==6' -r raw-r6-s
+lingalyzer inter1.cnd -i '$ITEM $ANOV' -d '$RWRT' -a 'item type length raw' -f '[eq $EXPT inter1] && $RWZS < 4 && $RNUM==6' -r raw-r6-i
+lingalyzer inter1.cnd -i '$ITEM $COND' -d '$RWRT' -t 'item condition raw' -f '[eq $EXPT inter1] && $RWZS < 4 && $RNUM==6' -r raw-r6-i
+
+# Averages, ANOVAS, T-tests on residual data:
+lingalyzer inter1.cnd -i '$COND' -d '$RSRT' -f '[eq $EXPT inter1] && $RSZS < 4 && $RNUM==6' -r res-r6
+lingalyzer inter1.cnd -i '$SUBJ $ANOV' -d '$RSRT' -a 'subject type length resid' -f '[eq $EXPT inter1] && $RSZS < 4 && $RNUM==6' -r res-r6-s
+lingalyzer inter1.cnd -i '$SUBJ $COND' -d '$RSRT' -t 'subject condition resid' -f '[eq $EXPT inter1] && $RSZS < 4 && $RNUM==6' -r res-r6-s
+lingalyzer inter1.cnd -i '$ITEM $ANOV' -d '$RSRT' -a 'item type length resid' -f '[eq $EXPT inter1] && $RSZS < 4 && $RNUM==6' -r res-r6-i
+lingalyzer inter1.cnd -i '$ITEM $COND' -d '$RSRT' -t 'item condition resid' -f '[eq $EXPT inter1] && $RSZS < 4 && $RNUM==6' -r res-r6-i
+
+############################# QUESTION ANSWERING ##############################
+
+# Average question answering percent correct by condition:
+lingalyzer inter1.cnd -i '$EXPT $COND' -d '$QCRC' -q qst
+
+# ANOVA and pairwise T-Tests by subjects:
+lingalyzer inter1.cnd -i '$SUBJ $ANOV' -d '$QCRC' -a 'subject type length qcrc' -f '[eq $EXPT inter1]' -q qst-s
+lingalyzer inter1.cnd -i '$SUBJ $COND' -d '$QCRC' -t 'subject condition qcrc' -f '[eq $EXPT inter1]' -q qst-s
+
+# ANOVA and pairwise T-Tests by items:
+lingalyzer inter1.cnd -i '$ITEM $ANOV' -d '$QCRC' -a 'item type length qcrc' -f '[eq $EXPT inter1]' -q qst-i
+lingalyzer inter1.cnd -i '$ITEM $COND' -d '$QCRC' -t 'item condition qcrc' -f '[eq $EXPT inter1]' -q qst-i
+
+# Average question answering times:
+lingalyzer inter1.cnd -i '$EXPT $COND' -d '$RWRT' -q qst-rt
+lingalyzer inter1.cnd -i '$SUBJ $ANOV' -d '$RWRT' -a 'subject type length qcrc' -f '[eq $EXPT inter1]' -q qst-rt-s
+lingalyzer inter1.cnd -i '$SUBJ $COND' -d '$RWRT' -t 'subject condition qcrc' -f '[eq $EXPT inter1]' -q qst-rt-s
+
+############################## REGRESSION ANALYSIS ############################
+
+# Although it is not necessarily appropriate for this experiment, this is an
+# example of how to perform a reading time regression analysis.  This may be
+# useful if you, for example, have three conditions that vary in a single
+# dimension, such as short, medium, long or easy, medium hard.
+
+# The Difficulty array has been defined in the inter1.cnd to hold an integer
+# value for each of the conditions, reflecting their expected difficulty,
+# according to our favorite theory.  We will compute a regression of the
+# residual reading time against these values to see if there is a significant
+# trend towards longer reading times with more difficult items.
+
+# The independent variable is the difficulty level and the dependent is the
+# residual reading time.  The -e option is used to extract the individual
+# datapoints and - is used as the output filename, so the output is sent to
+# standard out, which is piped to the regress command.
+
+lingalyzer inter1.cnd -i '$Difficulty($COND)' -d '$RSRT' -f '[eq $EXPT inter1] && $RSZS < 4 && $RNUM==6' -e -r - | regress > res-r6.regress

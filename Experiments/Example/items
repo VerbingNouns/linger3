@@ -1,0 +1,1225 @@
+# inter1 1 a
+The detective suspected that the company
+which the manager ran had advertised falsely.
+? Was the detective suspicious of the company? Y
+# inter1 1 b
+The detective's suspicion that the company
+which the manager ran had advertised falsely was verified after further investigation.
+? Was the detective suspicious of the company? Y
+# inter1 1 c
+The detective suspected that the company
+which the manager with a record of corrupt practices ran had advertised falsely.
+? Was the detective suspicious of the company? Y
+# inter1 1 d
+The detective's suspicion that the company
+which the manager with a record of corrupt practices ran had advertised falsely was verified 
+after further investigation.
+? Was the detective suspicious of the company? Y
+
+
+# inter1 2 a
+The thief knew that the painting 
+which the son inherited could be sold for millions of dollars.
+? Did the son inherit a valuable painting? Y
+# inter1 2 b
+The thief's knowledge that the painting 
+which the son inherited could be sold for millions of dollars would prove to be useless.
+? Did the son inherit a valuable painting? Y 
+# inter1 2 c
+The thief knew that the painting 
+which the son of the former mayor of town inherited could be sold for millions of dollars.
+? Did the son inherit a valuable painting? Y
+# inter1 2 d
+The thief's knowledge that the painting
+which the son of the former mayor of town inherited could be sold for millions of dollars 
+would prove useless.
+? Did the son inherit a valuable painting? Y
+
+# inter1 3 a
+The company doubted that the drug 
+which the scientist researched would cure the disease.
+? Did the company believe the scientist's research would cure the disease? N
+# inter1 3 b
+The company's doubt that the drug 
+which the scientist researched would cure the disease was covered up.
+? Did the company believe the scientist's research would cure the disease? N
+# inter1 3 c
+The company doubted that the drug 
+which the scientist with a grant of ten_thousand dollars researched would cure the disease.
+? Did the company believe the scientist's research would cure the disease? N
+# inter1 3 d
+The company's doubt that the drug 
+which the scientist with a grant of ten_thousand dollars researched would cure the disease 
+was covered up.
+? Did the company believe the scientist's research would cure the disease? N
+
+# inter1 4 a
+The president insisted that the country 
+which the ambassador represented had violated the treaty.
+? Was the president told about the treaty? Y
+# inter1 4 b
+The president's insistence that the country 
+which the ambassador represented had violated the treaty worried the public. 
+? Was the president told about the treaty? Y
+# inter1 4 c
+The president insisted that the country 
+which the ambassador with information about the secret plans represented had violated the treaty.
+? Was the president told about the treaty? Y
+# inter1 4 d
+The president's insistence that the country 
+which the ambassador with information about the secret plans represented had violated the treaty 
+worried the public.
+? Was the president told about the treaty? Y
+
+# inter1 5 a
+The government acknowledged that the money 
+which the army utilized would be spent on a missile defense system.
+? Was the money spent on a military offensive project? N
+# inter1 5 b
+The government's acknowledgment that the money 
+which the army utilized would be spent on a missile defense system caused an uproar.
+? Was the money spent on a military offensive project? N
+# inter1 5 c
+The government acknowledged that the money 
+which the army with a stockpile of useless weapons utilized would be spent 
+on a missile defense system. 
+? Was the money spent on a military offensive project? N
+# inter1 5 d
+The government's acknowledgment that the money 
+which the army with a stockpile of useless weapons utilized would be spent 
+on a missile defense system caused an uproar.
+? Was the money spent on a military offensive project? N
+
+# inter1 6 a
+The defendant claimed that the drugs 
+which the cop located were not his. 
+? Did the policeman find drugs? Y
+# inter1 6 b
+The defendant's claim that the drugs 
+which the cop located were not his was absurd. 
+? Did the policeman find drugs? Y
+# inter1 6 c
+The defendant claimed that the drugs 
+which the cop with extensive experience in the force located were not his. 
+? Did the policeman find drugs? Y
+# inter1 6 d
+The defendant's claim that the drugs 
+which the cop with extensive experience in the force located were not his was absurd. 
+? Did the policeman find drugs? Y
+
+# inter1 7 a
+The lawyer predicted that the case 
+which the firm represented would be settled outside of court.
+? Did the lawyer believe that the firm would go to court? N
+# inter1 7 b
+The lawyer's prediction that the case 
+which the firm represented would be settled outside of court 
+turned out to be correct. 
+? Did the lawyer believe that the firm would go to court? N
+# inter1 7 c
+The lawyer predicted that the case 
+which the firm on the side of the defendant represented would be settled outside of court.
+? Did the lawyer believe that the firm would go to court? N
+# inter1 7 d
+The lawyer's prediction that the case 
+which the firm on the side of the defendant represented would be settled outside of court 
+turned out to be correct.
+? Did the lawyer believe that the firm would go to court? N
+
+# inter1 8 a
+The sergeant presumed that the bomb 
+which the student constructed should be treated as evidence. 
+? Did the student build a dangerous weapon? Y
+# inter1 8 b
+The sergeant's presumption that the bomb 
+which the student constructed should be treated as evidence 
+was agreed upon by more informed authorities. 
+? Did the student build a dangerous weapon? Y
+# inter1 8 c
+The sergeant presumed that the bomb 
+which the student with a history of mental instability constructed should be treated as evidence. 
+? Did the student build a dangerous weapon? Y
+# inter1 8 d
+The sergeant's presumption that the bomb
+which the student with a history of mental instability constructed should be treated as evidence 
+was agreed upon by more informed authorities.
+? Did the student build a dangerous weapon? Y
+
+# inter1 9 a
+The scientist realized that the compounds 
+which the student mixed would react very quickly.
+? Were the compounds mixed by the professor? N
+# inter1 9 b
+The scientist's realization that the compounds 
+which the student mixed would react very quickly did not prevent the subsequent mess.
+? Were the compounds mixed by the professor? N
+# inter1 9 c
+The scientist realized that the compounds 
+which the student with an interest in inorganic chemistry mixed would react very quickly.
+? Were the compounds mixed by the professor? N
+# inter1 9 d
+The scientist's realization that the compounds 
+which the student with an interest in inorganic chemistry mixed would react very quickly 
+did not prevent the subsequent mess.
+? Were the compounds mixed by the professor? N
+
+# inter1 10 a
+The seller promised that the lotion 
+which the woman bought would work wonders. 
+? Did the woman buy the lotion? Y
+# inter1 10 b
+The seller's promise that the lotion 
+which the woman bought would work wonders pleased the suppliers.
+? Did the woman buy the lotion? Y
+# inter1 10 c
+The seller promised that the lotion 
+which the woman with a shelf of bath products bought would work wonders.
+? Did the woman buy the lotion? Y
+# inter1 10 d
+The seller's promise that the lotion 
+which the woman with a shelf of bath products bought would work wonders pleased the suppliers. 
+? Did the woman buy the lotion? Y
+
+# inter1 11 a
+The publisher believed that the manuscript 
+which the author presented would become a best seller.
+? Did the publisher think customers would dislike the manuscript? N
+# inter1 11 b
+The publisher's belief that the book 
+which the author presented would become a best seller was misplaced. 
+? Did the publisher think customers would dislike the manuscript? N
+# inter1 11 c
+The publisher believed that the manuscript 
+which the author with positive reviews from respected critics presented would be a best seller. 
+? Did the publisher think customers would dislike the manuscript? N
+# inter1 11 d
+The publisher's belief that the manuscript 
+which the author with positive reviews from respected critics presented would be a best seller 
+was misplaced. 
+? Did the publisher think customers would dislike the manuscript? N
+
+# inter1 12 a
+The employee realized that the company 
+which the administrator managed planned a layoff.
+? Did the employee know that his job was endangered? Y
+# inter1 12 b
+The employee's realization that the company 
+which the administrator managed planned a layoff caused him to seek other employment.
+? Did the employee know that his job was endangered? Y
+# inter1 12 c
+The employee realized that the company 
+which the administrator on the committee for corporate restructuring managed planned a layoff.
+? Did the employee know that his job was endangered? Y
+# inter1 12 d
+The employee's realization that the company 
+which the administrator on the committee for corporate restructuring managed planned a layoff 
+caused him to seek other employment.
+? Did the employee know that his job was endangered? Y
+
+# inter1 13 a
+The guide implied that the event 
+which the tourists attended would provide money to charity.
+? Did the tourists get the impression that the event was for charity? Y
+# inter1 13 b
+The guide's implication that the event 
+which the tourists attended would provide money to charity was just a marketing ploy.
+? Did the tourists get the impression that the event was for charity? Y
+# inter1 13 c
+The guide implied that the event 
+which the tourists with invitations from the organizing committee attended would provide money 
+to charity.
+? Did the tourists get the impression that the event was for charity? Y
+# inter1 13 d
+The guide's implication that the event 
+which the tourists with invitations from the organizing committee attended would provide money 
+to charity was just a marketing ploy.
+? Did the tourists get the impression that the event was for charity? Y
+
+# inter1 14 a
+The clerk recommended that the complaint 
+which the customer filed be sent to customer services.
+? Did the clerk file a complaint? N
+# inter1 14 b
+The clerk's recommendation that the complaint 
+which the customer filed be sent to customer services was ignored.
+? Did the clerk file a complaint? N
+# inter1 14 c
+The clerk recommended that the complaint 
+which the customer with a record of questionable returns filed be sent to customer services.
+? Did the clerk file a complaint? N
+# inter1 14 d
+The clerk's recommendation that the complaint 
+which the customer with a record of questionable returns filed be sent to customer services 
+was ignored.
+? Did the clerk file a complaint? N
+
+# inter1 15 a
+The students complained that the problems 
+which the professor assigned were unrelated to the material on the exam.
+? Did the students think that the homework helped on the exam? N
+# inter1 15 b
+The students' complaints that the problems 
+which the professor assigned were unrelated to the material on the exam were taken seriously 
+by the professor.
+? Did the students think that the homework helped on the exam? N
+# inter1 15 c
+The students complained that the problems 
+which the professor with a prestigious award in physics assigned were unrelated to the material 
+on the exam.
+? Did the students think that the homework helped on the exam? N
+# inter1 15 d
+The students' complaints that the problems 
+which the professor with a prestigious award in physics assigned were unrelated to the material 
+on the exam were taken seriously by the professor.
+? Did the students think that the homework helped on the exam? N
+
+# inter1 16 a
+The judge decided that the objection 
+which the prosecution made should be overruled. 
+? Did the judge side with the prosecution? N
+# inter1 16 b
+The judge's decision that the objection 
+which the prosecution made should be overruled changed the tone of the court.
+? Did the judge side with the prosecution? N
+# inter1 16 c
+The judge decided that the objection 
+which the prosecution from a firm in the Northeast made should be overruled.
+? Did the judge side with the prosecution? N
+# inter1 16 d
+The judge's decision that the objection 
+which the firm from a firm in the Northeast made should be overruled changed the tone of the court.
+? Did the judge side with the prosecution? N
+
+# inter1 17 a
+The customer requested that the food which the chef prepared be made without garlic.
+? Did the food normally contain garlic? Y
+# inter1 17 b
+The customer's request that the food 
+which the chef prepared be made without garlic offended the waiter.
+? Did the food normally contain garlic? Y
+# inter1 17 c
+The customer requested that the food 
+which the chef with extensive training in Italian cooking prepared be made without garlic.
+? Did the food normally contain garlic? Y
+# inter1 17 d
+The customer's request that the food 
+which the chef with extensive training in Italian cooking prepared be made without garlic 
+offended the waiter.
+? Did the food normally contain garlic? Y
+
+# inter1 18 a
+The investigator theorized that the plane 
+which the pilot crashed had spiraled out of control.
+? Did the plane have a smooth flight under the pilot? N
+# inter1 18 b
+The investigator's theory that the plane 
+which the pilot crashed had spiraled out of control was supported by the evidence. 
+? Did the plane have a smooth flight under the pilot? N
+# inter1 18 c
+The investigator's theory that the plane 
+which the pilot with a record of careless risks crashed had spiraled out of control was supported 
+by the evidence. 
+? Did the plane have a smooth flight under the pilot? N
+# inter1 18 d
+The investigator's theory that the plane 
+which the pilot with a record of careless risks crashed had spiraled out of control was supported 
+by the evidence. 
+? Did the plane have a smooth flight under the pilot? N
+
+# inter1 19 a
+The psychiatrist worried that the pills 
+which the patient hoarded would be used in a suicide attempt.
+? Was the patient using medication appropriately? N
+# inter1 19 b
+The psychiatrist's worry that the pills 
+which the patient hoarded would be used in a suicide attempt was alleviated 
+by the action of hospital security.
+? Was the patient using medication appropriately? N
+# inter1 19 c
+The psychiatrist worried that the pills 
+which the patient with a family history of depression hoarded would be used in a suicide attempt.
+? Was the patient using medication appropriately? N
+# inter1 19 d
+The psychiatrist's worry that the pills 
+which the patient with a family history of depression hoarded would be used in a suicide attempt 
+was alleviated by the action of hospital security.
+? Was the patient using medication appropriately? N   
+
+# inter1 20 a
+The broker speculated that the stocks 
+which the company sold would increase in value.
+? Did the broker think it was a good idea to invest in the company? Y
+# inter1 20 b
+The broker's speculation that the stocks 
+which the company sold would increase in value proved to be highly profitable.
+? Did the broker think it was a good idea to invest in the company? Y
+# inter1 20 c
+The broker speculated that the stocks 
+which the company with big plans for new products sold would increase in value.
+? Did the broker think it was a good idea to invest in the company? Y
+# inter1 20 d
+The broker's speculation that the stocks 
+which the company with big plans for new products sold would increase in value proved to be 
+highly profitable.
+? Did the broker think it was a good idea to invest in the company? Y
+
+# inter1 21 a
+The professor assumed that the essay 
+which the student presented was copied from someone else.
+? Did the professor mistrust the student? Y
+# inter1 21 b
+The professor's assumption that the essay 
+which the student presented was copied from someone else was quickly verified. 
+? Did the professor mistrust the student? Y
+# inter1 21 c
+The professor assumed that the essay 
+which the student with a dislike for writing classes presented was copied form someone else. 
+? Did the professor mistrust the student? Y
+# inter1 21 d
+The professor's assumption that the essay 
+which the student with a dislike for writing classes presented was copied from someone else 
+was quickly verified.
+? Did the professor mistrust the student? Y
+
+# inter1 22 a
+The landlord insisted that the contract 
+which the tenant signed allowed the change in rent.
+? Did the tenant want to change the rent? N
+# inter1 22 b
+The landlord's insistence that the contract 
+which the tenant signed allowed the change in rent did not stand up in court. 
+? Did the tenant want to change the rent? N
+# inter1 22 c
+The landlord insisted that the contract 
+which the tenant with the noisy parties at night signed allowed the change in rent. 
+? Did the tenant want to change the rent? N
+# inter1 22 d
+The landlord's insistence that the contract 
+which the tenant with the noisy parties at night signed allowed the change in rent did not stand up
+ in court. 
+? Did the tenant want to change the rent? N
+
+# inter1 23 a
+The spokesman hinted that the accusation 
+which the athlete made might lead to an investigation. 
+? Was the athlete's accusation ignored? N
+# inter1 23 b
+The spokesman's hint that the accusation 
+which the athlete made might lead to an investigation was greeted with scorn. 
+? Was the athlete's accusation ignored? N
+# inter1 23 c
+The spokesman hinted that the accusation 
+which the athlete in a fit of justifiable anger made might lead to an investigation. 
+? Was the athlete's accusation ignored? N
+# inter1 23 d
+The spokesman's hint that the accusation 
+which the athlete in a fit of justifiable anger made might lead to an investigation 
+was greeted with scorn.
+? Was the athlete's accusation ignored? N
+
+# inter1 24 a
+The president decided that the plan 
+which the congressman presented would fail.
+? Did the president like the congressman's proposal? N
+# inter1 24 b
+The president's decision that the plan 
+which the congressman presented would fail pleased his party.
+? Did the president like the congressman's proposal? N
+# inter1 24 c
+The president decided that the plan 
+which the congressman with a belief in lowering taxes presented would fail.
+? Did the president like the congressman's proposal? N
+# inter1 24 d
+The president's decision that the plan 
+which the congressman with a belief in lowering taxes presented would fail pleased his party.
+? Did the president like the congressman's proposal? N
+
+
+# part2 1 a
+The nurse supervised the administrator of the health department 
+who failed to understand the subtleties of the problem.
+? Did the administrator not understand the problem? Y
+# part2 1 b
+The nurse who worked for the doctor supervised the administrator of the health department 
+who was new to the job.
+? Was the doctor new to his job? N
+# part2 1 c
+The nurse who worked for the doctor who treated the child supervised the administrator 
+of the health department.
+? Did the nurse treat the child? N
+
+# part2 2 a
+The woman greeted the senator of the region who gave a moving speech 
+about the state of affairs in Rwanda.
+? Did the woman greet the politician? Y
+# part2 2 b
+The woman who worked for the executive greeted the senator of the region who hoped to be reelected.
+? Did the senator greet the woman? N
+# part2 2 c
+The woman who worked for the executive who made the donation greeted the senator of the region.
+? Was the woman employed? Y
+ 
+# part2 3 a
+The student received the grade of a B- in spite of the additional studying 
+and after school tutoring.
+? Did the student put in extra time studying? Y
+# part2 3 b
+The student who studied with the tutor received the grade of a B- 
+which relieved the student's family.
+? Did the student study alone? N
+# part2 3 c
+The student who studied with the tutor who planned the lessons received the grade of a B-.
+? Did the tutor read Spanish novels? N
+
+# part2 4 a
+The robber acquired the money in the vault by turning the dial to the appropriate numbers 
+and listening until he heard the lock click open.
+? Did the robber use a laser to get money? Y
+# part2 4 b
+The robber who stole from the teller acquired the money in the vault 
+which he put into a Swiss bank account.  
+? Did the robber succeed in getting the money? Y
+# part2 4 c
+The robber who stole from the teller who alerted the police acquired the money in the vault.  
+? Did the teller acquire the money? N
+
+# part2 5 a
+The agent read the document with incriminating information 
+that implicated two additional employees in the crime. 
+? Did two employees have a document? N
+# part2 5 b
+The agent who investigated for the businessman read the document with incriminating information 
+that had been saved from the trash. 
+? Did the businessman read the incriminating document? N
+# part2 5 c
+The agent who investigated for the businessman who owned the corporation read the document 
+with incriminating information. 
+? Did the agent investigate for someone who owned a corporation? Y
+
+# part2 6 a
+The teacher became a principal in spite of the fact that she missed the interactive environment 
+of the classroom.   
+? Did the principal think miss the classroom environment? Y
+# part2 6 b
+The teacher who worked with the pupils became a principal who earned respect 
+throughout the school district.   
+? Was the principal once a teacher? Y
+# part2 6 c
+The teacher who worked with the pupils who forgot the material became a principal 
+after some additional training.   
+? Did the pupils remember what they were taught? N
+
+# part2 7 a
+The lawyer worried about the case which he knew would gain little sympathy 
+from the members of a jury.
+? Did the lawyer think the jury would sympathize with his cause? N
+# part2 7 b
+The lawyer who argued for the defendant worried about the case 
+which was very complicated from a legal standpoint.
+? Did the lawyer think the case was straight forward? N
+# part2 7 c
+The lawyer who argued for the defendant who denied any guilt worried about the case 
+which he would present.
+? Did the defendant claim he was innocent? Y
+
+# part2 8 a
+The representative compromised at the last minute in an attempt to please 
+both the businesses and his constituency.
+? Did the representative want to please businesses? Y
+# part2 8 b
+The representative who spoke for the people compromised at the last minute 
+in order to please the businesses.
+? Did the people compromise? N
+# part2 8 c
+The representative who spoke for the people who opposed the plan compromised at the last minute.
+? Did the representative compromise? Y
+
+# part2 9 a
+The private earned a medal for his bravery even though some argued 
+that other members of his unit deserved more recognition.
+? Was the private's bravery recognized? Y
+# part2 9 b
+The private who served under the lieutenant earned a medal for his bravery 
+which had saved many lives in the battle.
+? Did the lieutenant earn a medal for his bravery? N
+# part2 9 c
+The private who served under the lieutenant who commanded two units earned a medal for his bravery 
+in the battle.
+? Did the lieutenant earn a medal? N
+
+# part2 10 a
+The employee received a pink slip from the manager who was angered by his chronic tardiness 
+and blatant disrespect.
+? Was the employee angered by blatant disrespect? N
+# part2 10 b
+The employee who talked about the executive received a pink slip from the manager 
+who fired him on the executive's order.
+? Was the employee fired? Y
+# part2 10 c
+The employee who talked about the executive who created the company received a pink slip 
+from the manager.
+? Did the manager give out a pink slip? Y
+
+# part2 11 a
+The mathematician revealed a flaw in the theory which shocked the scientists who formulated it.
+? Were the scientists shocked by the flaw? Y
+# part2 11 b
+The mathematician who worked with the scientists revealed a flaw in the theory 
+which spurred further innovative research.
+? Did the scientists reveal the flaw in the theory? N
+# part2 11 c
+The mathematician who worked with the scientists who discovered the phenomenon revealed a flaw 
+in the theory.
+? Did the scientists reveal the flaw in the theory? N
+
+# part2 12 a
+The reporter wrote a scathing editorial in the paper because she vehemently disagreed 
+with the politician's views.
+? Did the reporter agree with the politician? N
+# part2 12 b
+The reporter who smiled at the politician wrote a scathing editorial in the paper 
+in which she called the politician an imbecile.
+? Did the editorial insult the politician? Y
+# part2 12 c
+The reporter who smiled at the politician who supported the bill wrote a scathing editorial 
+in the paper.
+? Did the politician support the bill? Y
+
+# part2 13 a 
+The customer received a free coupon to the store even though she had sworn never 
+to shop there again.
+? Was a free coupon given out? Y
+# part2 13 b 
+The customer who complained to the manager received a free coupon to the store 
+after returning the defective item.
+? Did the manager complain? N
+# part2 13 c
+The customer who complained to the manager who fired the assistant received a free coupon 
+to the store.
+? Did the customer want the assistant fired? N
+
+# part2 14 a
+The politician became a hero to the local farmers who wanted price floors 
+on the cost of their produce.
+? Were the country farmers heroic? N
+# part2 14 b
+The politician who fought for the people became a hero to the local farmers who reelected him.
+? Was the politician reelected? Y
+# part2 14 c
+The politician who fought for the people who harvested the crops became a hero 
+to the local farmers.
+? Was the politician liked by the farmers? Y
+
+# part2 15 a
+The psychologist asked a psychiatrist for the patient's prescription 
+even though the anti-depressants were only somewhat effective.  
+? Did the patient need medication? Y
+# part2 15 b
+The psychologist who listened to the patient asked a psychiatrist 
+for the patient's prescription of Prozac.  
+? Did the psychiatrist listen to the patient? N
+# part2 15 c
+The psychologist who listened to the patient who heard some voices asked a psychiatrist 
+for the patient's prescription.  
+? Did the psychiatrist listen to the patient? N
+
+# part2 16 a
+The director wanted the understudy to perform because he thought she had more talent and potential 
+than the lead.
+? Did the director think the understudy was lacking in talent? N
+# part2 16 b
+The director who frowned upon the actor wanted the understudy to perform the part of Cleopatra 
+in the final production.
+? Did the director want the understudy to act as Cleopatra? Y
+# part2 16 c
+The director who frowned upon the actor who won an award wanted the understudy to perform instead.
+? Did the director disapprove of the actor? Y
+
+# part2 17 a
+The judge requested a recess in the trial so he could have more time to think 
+about the implications of the new evidence.
+? Was a recess requested? Y
+# part2 17 b
+The judge who listened to the attorneys requested a recess in the trial 
+to consider the new evidence.
+? Did the attorneys request a recess? N
+# part2 17 c
+The judge who listened to the attorneys who represented the defendant requested a recess 
+in the trial.
+? Did the attorneys request a recess? N
+
+# part2 18 a
+The businessman owned a company in New York, but he wanted to sell it to a larger corporation.
+? Did the businessman own a company in Europe? N
+# part2 18 b
+The businessman who talked to the engineer owned a company in New York, but he wanted to sell it.
+? Did the businessman want to sell his company? Y
+# part2 18 c
+The businessman who talked to the engineer who designed the bridge owned a company in New York.
+? Did the businessman converse with an engineer? Y
+
+# part2 19 a
+The Republican promised reform if elected; however, he did not intend to follow through 
+with his promise. 
+? Was the politician Republican? Y
+# part2 19 b
+The Republican who agreed with the businesses promised reform if elected in the coming month. 
+? Were the elections a couple of months away? N
+# part2 19 c
+The Republican who agreed with the businesses who wanted lower taxes promised reform if elected 
+in November. 
+? Did the politician promise improvements in education? N
+
+# part2 20 a
+The girl helped the charity for the homeless which raised over a thousand dollars 
+with her fund raiser.  
+? Did the charity help the girl? N
+# part2 20 b
+The girl who prayed for the woman helped the charity for the homeless 
+with donations and contributions.   
+? Did the girl provide the charity with donations? Y
+# part2 20 c
+The girl who prayed for the woman who supported the family helped the charity for the homeless.   
+? Did the woman support the family? Y
+
+# part2 21 a
+The musician appreciated the difficulty of the sonata even though he performed it 
+with seemingly effortless ease. 
+? Did the musician's performance make the sonata seem easy? Y
+# part2 21 b
+The musician who played for the ambassadors appreciated the difficulty of the sonata 
+even though many did not. 
+? Did the ambassadors appreciate the sonata's difficulty? N
+# part2 21 c
+The musician who played for the ambassadors who enjoyed the performance appreciated the difficulty 
+of the sonata.   
+? Did the ambassadors appreciate the sonata's difficulty? N
+
+# part2 22 a
+The magician pulled a bunny from the hat which he brought to every magic show he performed.
+? Did the magician forget his hat? N
+# part2 22 b
+The magician who performed for the children pulled a bunny from the hat 
+which he brought to every magic show.
+? Did the child perform a magic trick? N
+# part2 22 c
+The magician who performed for the children who feared the clown pulled a bunny from the hat.
+? Were the children afraid of the clown? Y
+
+# part2 23 a
+The nun enjoyed the stories in the Bible although she noticed 
+that they sometimes contained conflicting messages and facts.
+? Did the woman like Biblical stories? Y
+# part2 23 b
+The nun who sympathized with the child enjoyed the stories in the Bible 
+that provided encouragement and inspiration.
+? Did the child like Biblical stories? N
+# part2 23 c
+The nun who sympathized with the child who sang the hymn enjoyed the stories in the Bible.
+? Did the child sing? Y
+
+# part2 24 a
+The monkey preferred to perform with the music even though the trainer found it distracting.  
+? Was the monkey distracted by music? N
+# part2 24 b
+The monkey who waited for the trainer preferred to perform with the music 
+that distracted the other animals.
+? Did the music distract the other animals? Y
+# part2 24 c
+The monkey who waited for the trainer who gave the signal preferred to perform with the music.  
+? Did the monkey prefer performing with music? Y
+
+
+# 2objverbs 1 a
+Mary gave a book to a young child who was very grateful for the present and read it quickly. 
+? Did the child not read the book? N
+# 2objverbs 1 b
+Mary gave a book which had impressed some critics to a young child 
+who was grateful for the present. 
+? Was a book given to Mary? N
+# 2objverbs 1 c
+Mary gave a book which had impressed some critics who worked for a magazine to a young child. 
+? Was a book given to Mary? N
+# 2objverbs 1 d
+Mary read a book which had impressed some critics who worked for a magazine to a young child.
+? Did Mary work for a magazine? N
+# 2objverbs 1 e
+Mary published a book which had impressed some critics who worked for a magazine.
+? Did Mary work for a magazine? N
+
+# 2objverbs 2 a
+Joe placed the dishes into the cabinet which had the beautiful stained glass doors.
+? Were the doors of the cabinet pretty? Y
+# 2objverbs 2 b
+Joe placed the dishes which had pleased the hostess into the cabinet in the dining room.  
+? Was the cabinet in the dining room? Y
+# 2objverbs 2 c
+Joe placed the dishes which had pleased the hostess who catered for some friends into the cabinet 
+above the counter.
+? Did Joe put the dishes into the cabinet? Y
+# 2objverbs 2 d
+Joe moved the dishes which had pleased the hostess who catered for some friends into the cabinet 
+above the counter.
+? Did Joe put the dishes into the cabinet? Y
+# 2objverbs 2 e
+Joe broke the dishes which had pleased the hostess who catered for some friends.
+? Was the hostess pleased by the dishes? Y
+
+# 2objverbs 3 a
+Jane put the ball into the closet after deciding the garage was an unsuitable place to store it.
+? Was the ball put in the garage? N
+# 2objverbs 3 b
+Jane put the ball which had struck the boy into the closet that contained all the other toys.
+? Did the boy put the ball in the closet? N
+# 2objverbs 3 c
+Jane put the ball which had struck the boy who cried after the accident into the closet 
+in the hallway.
+? Did Jane cry after the accident? N
+# 2objverbs 3 d
+Jane took the ball which had struck the boy who cried after the accident into the closet 
+in the hallway.
+? Did the boy take the ball after the accident? N
+# 2objverbs 3 e
+Jane hid the ball which had struck the boy who cried after the accident.
+? Did Jane cry after the accident? N
+
+# 2objverbs 4 a
+Chris handed the drawing to a student who looked at it critically and decided 
+that the perspective was poorly done.
+? Was the student critical of the drawing? Y
+# 2objverbs 4 b
+Chris handed the drawing which had amazed the teacher to a student who studied art history.
+? Did the student know something about the history of art? Y
+# 2objverbs 4 c
+Chris handed the drawing which had amazed the teacher who studied at art school to a student 
+of art history.
+? Did Christopher give the drawing to the teacher? Y
+# 2objverbs 4 d
+Chris mentioned a drawing which had amazed the teacher who studied at art school to a student 
+of art history.
+? Had the teacher studied at art school? Y
+# 2objverbs 4 e
+Christopher copied the drawing which had amazed the teacher who studied at art school.
+? Did the drawing impress the teacher? Y
+
+# 2objverbs 5 a
+Joe positioned the pieces onto the chess board after determining that he would play 
+with the black pieces.
+? Did Joe decide to play with the white pieces? N
+# 2objverbs 5 b
+Joe positioned the pieces which had fascinated the artist onto the chess board with care.
+? Did the artist position the pieces? N
+# 2objverbs 5 c
+Joe positioned the pieces which had fascinated the artist who talked about wood work onto the chess
+board carefully.
+? Did Joe talk about wood work? N
+# 2objverbs 5 d
+Joe arranged the pieces which had fascinated the artist who talked about wood work onto the chess 
+board carefully.
+? Did the artist arrange the pieces? N
+# 2objverbs 5 e
+Joe held the pieces which had fascinated the artist who talked about wood work.
+? Did Joe talk about wood work? N
+
+# 2objverbs 6 a
+Sue slung the bag into the overhead compartment with surprising ease and grace.   
+? Did the bag get put into the overhead compartment? Y
+# 2objverbs 6 b
+Sue slung the bag which had strained the grandma into the overhead compartment 
+and closed the compartment securely.   
+? Did Sue close the overhead compartment? Y
+# 2objverbs 6 c
+Sue slung the bag which had strained the grandma who suffered from chronic pain into the overhead 
+compartment.   
+? Did Sue move the bag into the overhead compartment? Y
+# 2objverbs 6 d
+Sue raised the bag which had strained the grandma who suffered from chronic pain into the overhead 
+compartment.   
+? Did the Grandma have chronic pain? Y
+# 2objverbs 6 e
+Sue carried the bag which had strained the grandma who suffered from chronic pain.   
+? Did someone other than the grandmother carry the bag? Y
+
+# 2objverbs 7 a
+Pete handed the binder to the clerk who took it without question or complaint
+and placed it on the shelf.
+? Did the clerk hand out the binder? N
+# 2objverbs 7 b
+Pete handed the binder which had upset the engineer to the clerk who took it 
+without question.
+? Did the engineer give the binder to the clerk? N
+# 2objverbs 7 c
+Pete handed the binder which had upset the engineer who complained about budget cuts to the clerk 
+who put it away.
+? Did Pete complain about budget cuts? N
+# 2objverbs 7 d
+Pete returned the binder which had upset the engineer who complained about budget cuts to the clerk
+who put it away.
+? Did the engineer return the binder to the clerk? N
+# 2objverbs 7 e
+Pete found the binder which had surprised the engineer who complained about budget cuts.
+? Did the binder surprise Peter? N
+
+# 2objverbs 8 a 
+Margarite gave the present to the toddler who smiled and thanked her for the gift.  
+? Did the toddler thank Margarite? Y
+# 2objverbs 8 b 
+Margarite gave the present which had interested the girl to the toddler 
+who smiled and opened the gift.  
+? Was the little girl interested in the present? Y
+# 2objverbs 8 c 
+Margarite gave the present which had interested the girl who played with the doll to the toddler 
+who appreciated the gift.
+? Did Margarite give away a present? Y
+# 2objverbs 8 d 
+Margarite took the present which had interested the girl who played with the doll to the toddler 
+who appreciated the gift.
+? Was the little girl curious about the present's contents? Y
+# 2objverbs 8 e 
+Margarite wanted the present which had interested the girl who played with the doll.
+? Was the little girl curious about the present's contents? Y
+
+# 2objverbs 9 a
+Joey passed the muffins to the woman who slowly sipped her tea and admired the expensive china.
+? Did the woman sipping tea pass the muffins? N
+# 2objverbs 9 b
+Joey passed the muffins which had interested the child to the woman who slowly sipped her tea.
+? Did the child pass the muffins? N
+# 2objverbs 9 c
+Joey passed the muffins which had interested the child who sat at the table to the woman 
+who asked for them.
+? Did the muffins interest Joey? N
+# 2objverbs 9 d
+Joey served the muffins which had interested the child who sat at the table to the woman 
+who asked for them.
+? Did the child serve the muffins? N
+# 2objverbs 9 e
+Joey ate the muffins which had interested the child who sat at the table.
+? Did Joey sit at the table? N
+
+# 2objverbs 10 a
+Marcie placed the vest into the storage area which was located below the main deck of the ship.  
+? Did Marcie move the vest? Y
+# 2objverbs 10 b
+Marcie placed the vest which had saved the man into the storage area with the other life vests.  
+? Did Marcie place the vest into the storage area? Y
+# 2objverbs 10 c
+Marcie placed the vest which had saved the man who fell into the water into the storage area. 
+? Had the vest saved the man? Y
+# 2objverbs 10 d
+Marcie raised the vest which had saved the man who fell into the water into the storage area. 
+? Did the man fall into the water? Y
+# 2objverbs 10 e
+Marcie dried the vest which had saved the man who fell into the water. 
+? Was the vest dried off? Y
+
+
+# 2objverbs 11 a
+Kate put the food into the refrigerator to prevent it from going stale before tomorrow's lunch.
+? Did Kate leave the food to go stale? N
+# 2objverbs 11 b
+Kate put the food which had quieted the children into the refrigerator on the middle shelf. 
+? Did the children put the food in the refrigerator? N
+# 2objverbs 11 c
+Kate put the food which had quieted the children who whined about being hungry into the fridge 
+to save for later.
+? Did Kate watch the television? N
+# 2objverbs 11 d
+Kate moved the food which had quieted the children who whined about being hungry into the fridge 
+to save for later.
+? Was Kate quieted by the food? N
+# 2objverbs 11 e
+Kate ate the food which had quieted the children who whined about being hungry. 
+? Did Kate complain about being hungry? N
+
+# 2objverbs 12 a
+Nancy put the cup onto the saucer after she had finished drinking her coffee with cream.
+? Did Nancy drink coffee with cream? Y
+# 2objverbs 12 b
+Nancy put the cup which had impressed the women onto the saucer after she had finished her coffee.
+? Did the cup impress the women?  Y
+# 2objverbs 12 c
+Nancy put the cup which had impressed the women who drank the green tea onto the saucer 
+to prevent it from spilling.
+? Did Nancy put the cup onto the saucer?  Y
+# 2objverbs 12 d
+Nancy lowered the cup which had impressed the women who drank the green tea onto the saucer 
+to prevent it from spilling.
+? Did the women drink tea? Y
+# 2objverbs 12 e
+Nancy purchased the cup which had impressed the women who drank the green tea.
+? Did Nancy buy a cup? Y
+
+# 2objverbs 13 a
+De handed the script to the actor who immediately began to practice and memorize his lines.
+? Did De practice the script? N
+# 2objverbs 13 b
+De handed the script which had relieved the director to the actor who read his lines quickly.
+? Did the director hand the script to the actor? N
+# 2objverbs 13 c
+De handed the script which had relieved the director who worried about minute details to the actor
+who took it nonchalantly.
+? Did De worry about minute details? N
+# 2objverbs 13 d
+De recited the script which had relieved the director who worried about minute details to the actor
+who took it nonchalantly.
+? Did the actor worry about minute details? N
+# 2objverbs 13 e
+De reviewed the script which had relieved the director who worried about minute details.
+? Did the director review the script? N
+
+# 2objverbs 14 a
+Ed passed the book to the clerk who noted the title, author and copyright date.  
+? Did Ed give the book to the clerk? Y
+# 2objverbs 14 b
+Ed passed the book which had angered the protesters to the clerk who noted the title.  
+? Did the clerk note the title of the book? Y
+# 2objverbs 14 c
+Ed passed the book which had angered the protesters who believed in other ideals to the clerk 
+who read it quietly.
+? Did Ed pass a book to the clerk? Y
+# 2objverbs 14 d
+Ed recommended the book which had angered the protesters who believed in other ideals to the clerk 
+who read it quietly.
+? Was the book recommended to the clerk? Y
+# 2objverbs 14 e
+Ed disliked the book which had angered the protesters who believed in other ideals.  
+? Did Ed dislike the book? Y
+
+# 2objverbs 15 a
+Jan bequeathed the sculpture to the Museum of Fine Arts who placed the statue in the basement 
+of their art gallery.
+? Did Jan bequeath the sculpture to a family member? N
+# 2objverbs 15 b
+Jan bequeathed the sculpture which had inspired the author to the Museum of Fine Arts 
+who put the statue in storage.
+? Was the sculpture put in a highly visible location in the Museum of Fine Arts? N
+# 2objverbs 15 c
+Jan bequeathed the sculpture which had inspired the author who wrote about the artist to the Museum
+of Fine Arts.
+? Did the sculpture inspire Jan? N
+# 2objverbs 15 d
+Jan took the sculpture which had inspired the author who wrote about the artist to the Museum 
+of Fine Arts.
+? Did Jan write about the author? N
+# 2objverbs 15 e
+Jan admired the sculpture which had inspired the author who wrote about the artist.
+? Did Jan inspire the author? N
+
+# 2objverbs 16 a
+David loaned the cash to the casino owners who used it to start other lucrative businesses 
+of questionable moral value.
+? Were the casino owners start businesses with the cash? Y
+# 2objverbs 16 b
+David loaned the cash which had helped the company to the casino owners 
+who used it to start other businesses.
+? Had the cash helped the company? Y
+# 2objverbs 16 c
+David loaned the cash which had helped the company who expanded into new markets to the casino 
+owners from Las Vegas.
+? Did the company expand into new markets? Y
+# 2objverbs 16 d
+David lost the cash which had helped the company who expanded into new markets to the casino 
+owners from Las Vegas.
+? Had the cash helped the company expand? Y
+# 2objverbs 16 e
+David pocketed the cash which had helped the company who expanded into new markets.
+? Did David pocket the cash? Y
+
+# 2objverbs 17 a
+Eric allocated some funds to a charity because it seemed the appropriate thing to do at the time.
+? Did John allocate the funds? N
+# 2objverbs 17 b
+Eric allocated some funds which had pleased the executive to a charity 
+in order to improve the company image.
+? Did Eric please the organizer? N
+# 2objverbs 17 c
+Eric allocated some funds which had pleased the executive who spoke at the event to a charity 
+for the homeless.
+? Did Eric publicize for the event? N
+# 2objverbs 17 d
+Eric mentioned some funds which had pleased the executive who spoke at the event to a charity 
+for the homeless.
+? Did the organizer allocate some funds to a charity? N
+# 2objverbs 17 e
+Eric borrowed some funds which had pleased the executive who spoke at the event.
+? Did the organizer borrow some funds? N
+
+# 2objverbs 18 a
+Molly crammed the clothes into the drawer without realizing 
+that she would wrinkle her brand new skirt. 
+? Did Molly have a brand new skirt? Y
+# 2objverbs 18 b
+Molly crammed the clothes which had angered the roommate into the drawer not caring that 
+most of the clothes were dirty. 
+? Had the clothes angered the roommate? Y
+# 2objverbs 18 c
+Molly crammed the clothes which had angered the roommate who wished for a maid into the drawer 
+which she then tried to shut. 
+? Did Molly cram the clothes into the drawer? Y
+# 2objverbs 18 d
+Molly folded the clothes which had angered the roommate who wished for a maid into the drawer 
+which she then tried to shut. 
+? Did Molly fold the clothes? Y
+# 2objverbs 18 e
+Molly ignored the clothes which had angered the roommate who wished for a maid. 
+? Did the roommate wish for a maid? Y
+
+# 2objverbs 19 a
+Eric lodged the knife into the rack with the other kitchen utensils even though he knew 
+that this was not a good arrangement.  
+? Did Eric think that the knives were well arranged? N
+# 2objverbs 19 b
+Eric lodged the knife which had frightened the girl into the rack with the other kitchen utensils. 
+? Did the girl put the knife into the rack? N
+# 2objverbs 19 c
+Eric lodged the knife which had frightened the girl who yelled about the noise into the rack 
+which held the other kitchen utensils.
+? Did Eric yell about the noise? N
+# 2objverbs 19 d
+Eric lowered the knife which had frightened the girl who yelled about the noise into the rack 
+which held the other kitchen utensils.
+? Did the girl put the knife into the rack? N
+# 2objverbs 19 e
+Eric sharpened the knife which had frightened the girl who yelled about the noise.
+? Did Eric yell about the noise? N
+
+# 2objverbs 20 a
+Brenda stuffed the towel into the closet and shut the door 
+before the contents of the closet could overflow onto the floor.
+? Did the towel get put into the closet? Y
+# 2objverbs 20 b
+Brenda stuffed the towel which had dried the children into the closet and shut the door quickly.
+? Had the towel dried the children? Y
+# 2objverbs 20 c
+Brenda stuffed the towel which had dried the children who swam at the beach into the closet 
+and shut the door.
+? Did Brenda put the towel into the closet? Y
+# 2objverbs 20 d
+Brenda brought the towel which had dried the children who swam at the beach into the closet 
+and shut the door.
+? Did the children swim at the beach? Y
+# 2objverbs 20 e
+Brenda washed the towel which had dried the children who swam at the beach.
+? Did Brenda wash the towel? Y
+
+
+# filler 1 a
+Severe budget cuts, which forced elimination 
+of overtime and temporary hiring, left the agency with the worst pile-up that anyone can remember.
+? Did the budget cuts result in permanent employees being dismissed? N
+
+# filler 2 a
+As ground water drains away through underground construction, tunnels, or leaky sewers, 
+the wooden pilings that support older buildings are exposed to air and start to rot.
+? Is the draining of ground water a problem? Y
+
+# filler 3 a
+The owner was looking forward to retiring soon, 
+but said it would feel very strange to not have 
+the responsibility for a very special store anymore.
+? Was the owner leaving the store? Y
+
+# filler 4 a
+He was a recovering alcoholic, a timid man 
+who paid his weekly rent at exactly the same time every Friday and avoided others in the house.
+? Was the tenant sociable? N
+
+# filler 5 a
+In business, there is no downside, or at least none that is ever admitted.
+? Do businesses mostly portray events positively? Y
+
+# filler 6 a
+For the music to work, 
+the conductor must shape the gestures and the architecture according to 
+the composer's precise instructions, but if he tries to impose himself, he will fail.
+? Should the conductor add his own modifications to the scores he conducts? N
+
+# filler 7 a
+Africa is three times the size of the United States, with 52 countries and thousands of dialects.
+? Is Africa larger than the United States? Y
+
+# filler 8 a
+The man was barely twenty years old, spoke precious little English and 
+his only friends in town were sleeping in the other hotel room.
+? Was the man staying in a friend's house? N
+
+# filler 9 a
+Her words were a bad omen 
+for the orthographic commission of scribes, linguists, and other experts 
+who have been laboring to bring order to the language's antiquated spelling rules.
+? Were the language's spelling rules considered problematic? Y
+
+# filler 10 a
+It is likely that students who feel that they must compromise their values 
+to get high grades and test scores are aware of such behavior in government and business.
+? Does the speaker think that the government upholds its values? N
+
+# filler 11 a
+Whether or not he committed any crimes, the manager has shown 
+a troubling disregard for the ethical responsibilities that come with public service.
+? Were ethical responsibilities cast aside? Y
+
+# filler 12 a
+The best defense against hate is 
+a strong, diverse and democratic civic culture that respects human rights and civil liberties.
+? Does the statement say that civic culture plays a role in defending against hate? Y
+
+# filler 13 a
+The stock market boom, particularly the bubble in shares of unprofitable companies 
+that paid no taxes, may have created a tax boom that will never be seen again.
+? Were the unprofitable companies paying taxes? N
+
+# filler 14 a
+The businessman's intention was to take advantage of his multi-cultural expertise, 
+aim at a growing market, and spread the entrepreneurial culture throughout the continent.
+? Did the businessman have little experience in dealing with other cultures? N
+
+# filler 15 a
+Because the movie was such a mess, 
+one is relieved to say that the show does not fall short of the standards on which it is based.
+? Was the movie poorly done? Y
+
+# filler 16 a
+Dreams, omens, and prophecies play a large role in the character's lives.
+? Do the gods exert an influence on the characters? N  
+
+# filler 17 a
+The maid is a fiercely resentful domestic in a provincial town who turns on her employers.
+? Is the maid angry with her employers? Y
+
+# filler 18 a
+The world's biggest maker of phones said today that 
+it was drastically reducing its forecast for sales this year.
+? Was the company that made phones optimistic in its revised forecast? N
+
+# filler 19 a
+When the boy was three years old, 
+his dad bought a light blue car from his mother's sister and promised he would give it to the boy 
+someday.
+? Was the boy promised a car? Y
+
+# filler 20 a
+A laboratory has built the world's fastest computer, 
+a machine so powerful that 
+it outpaces the raw processing power of the second and third fastest computers combined.
+? Are the second and third fastest computers combined faster than the new one? N
+
+# filler 21 a
+Interviews with military and police officers and others directly involved revealed 
+that discontented military officers had been meeting among themselves for almost a year.
+? Were the military officers meeting for more than a month? Y
+
+# filler 22 a
+As a slow cold front undercut and lifted sultry air, 
+strong thunderstorms erupted in the region.
+? Did the region have pleasant weather? N
+
+# filler 23 a
+After peeling coring, and cutting the apples in half, 
+place them into the crock-pot and drizzle them with lemon juice and melted butter.
+? Should butter be added to the dish? Y
+
+# filler 24 a
+The woman who answered the phone, his wife, told her he was expected back the following evening. 
+? Did a man answer the phone? N

@@ -1,0 +1,11 @@
+proc webCompletion list {
+  global Sentence
+  set i 1
+  foreach item $list {
+    puts "<tr><td align=right><b>$i)</b><td>[lindex $Sentence($item) 0]..."
+    puts "<tr><td><td><input type=text name=$item size=80 maxlength=200>"
+    incr i
+  }
+}
+
+set Experiment webCompletion

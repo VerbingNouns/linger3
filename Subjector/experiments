@@ -1,0 +1,6 @@
+RALoc      30 {contrast[12]}
+PARC	   30 {}
+NRRC_inf   10 {DD2 NRRC.* AEDD Jon1}
+DR-RC-B	   40 {DR-RC-A}
+DR-RC-A	   25 {DR-RC-B}
+PCOH	   25 {}

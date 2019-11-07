@@ -1,0 +1,39 @@
+# This condition file is used only for the inter1 experiment.  To analyze data
+# from the other experiments, you would create a different .cnd file.
+
+# REGIONS:
+# a) The detective | suspected | that the company | which the manager || 
+#      ran | had advertised falsely.
+# b) The detective's | suspicion | that the company | which the manager || 
+#      ran | had advertised falsely | was verified after further investigation.
+# c) The detective | suspected | that the company | which the manager | 
+#      with a record of corrupt practices | ran | had advertised falsely.
+# d) The detective's | suspicion | that the company | which the manager |
+#      with a record of corrupt practices | ran | had advertised falsely |
+#      was verified after further investigation.
+
+set COND_NAME "inter1 a"
+set ANOVA_FACTORS "SC short"
+set GRAPH_LABEL "A) SC Short"
+set REGIONS "1:1-2 2:3 3:4-6 4:7-9 6:10 7:11-13 8:14-99"
+addCondition
+set COND_NAME "inter1 b"
+set ANOVA_FACTORS "NP short"
+set GRAPH_LABEL "B) NP Short"
+set REGIONS "1:1-2 2:3 3:4-6 4:7-9 6:10 7:11-13 8:14-99"
+addCondition
+set COND_NAME "inter1 c"
+set ANOVA_FACTORS "SC long"
+set GRAPH_LABEL "C) SC Long"
+set REGIONS "1:1-2 2:3 3:4-6 4:7-9 5:10-15 6:16 7:17-19 8:20-99"
+addCondition
+set COND_NAME "inter1 d"
+set ANOVA_FACTORS "NP long"
+set GRAPH_LABEL "D) NP Long"
+set REGIONS "1:1-2 2:3 3:4-6 4:7-9 5:10-15 6:16 7:17-19 8:20-99"
+addCondition
+
+set Difficulty(a) 0
+set Difficulty(b) 1
+set Difficulty(c) 2
+set Difficulty(d) 3

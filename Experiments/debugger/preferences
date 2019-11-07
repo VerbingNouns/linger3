@@ -1,0 +1,50 @@
+# The file, in the experiment directory, in which items are stored:
+set ItemFile     "items"
+#set ItemFile     "items-rateOnly"
+
+# The experiment procedure:
+set Experiment   centerSelfPacedReading
+# Other experiment types are:
+#	selfPacedReading 
+#   autoPacedReading
+#   centerSelfPacedReading
+#   centerAutoPacedReading
+#   blockReading
+#   listenAndAnswer
+#   auditoryPrimeLexicalDecision
+#   speakAndListen
+#   stopMakingSense (self paced reading with online grammatical judgment)
+
+
+# The font used for the sentences:
+set TextFont     "-family {courier} -size -24 -weight normal"
+# The font used for commands and other messages:
+set BigFont      "-family {helvetica} -size 28 -weight bold"
+# The font used for the PressKey message:
+set ContinueFont "-family {helvetica} -size 24 -weight bold"
+# The font used for the entry boxes (like fill-in-the-blank):
+set EntryFont    "-family {helvetica} -size 12 -weight bold"
+# The maximum number of characters per line:
+set MaxChars     100
+
+# Whether to request a rating in standard experiments:
+set CollectRatings 1
+# The maximum value of the rating scale:
+set RatingChoices 7
+# The message presented along with ratings:
+set RatingMessage "How did you feel about that final sentence?"
+# The label at the low end of the rating scale:
+set RatingEasy "Very Easy"
+# The label at the high end of the rating scale:
+set RatingHard "Very Hard"
+
+set QuestionsFirst 1
+
+# When doing center*PacedReading, if the words are left-justified relative to 
+# one another:
+set CenterLeftAligned  0
+# When doing center*PacedReading, the amount the words are shifted to the left
+# from the middle of the screen:
+set CenterLeftShift  -30
+# The size of a fixation crosshair:
+set CrossSize    20

@@ -1,0 +1,139 @@
+<html>
+<head>
+<title>Linger: Subjector Documentation</title>
+</head>
+<body bgcolor=white>
+<h1>Subjector Documentation</h1>
+<h4>Version 1.31</h4>
+<hr>
+
+<p>
+Subjector is a program for maintaining a database of experimental
+subjects.  There are two different interfaces to Subjector, although
+both use the same files for storing the database.  One is a Tcl/Tk
+window, and the other is a PHP script that will run on any web
+browser, provided you are running a web server with PHP capability.
+<p>
+Subjector allows you to search for subjects, add to or edit their
+data, and track the experiments they have performed.  The Subjector
+also monitors for conflicts between experiments and makes it easy to
+send email to all subjects who are currently eligible for new
+experiments.
+
+
+<h3>Interface</h3>
+<p>
+To create a new subject, press "Clear Record" if there is another
+record already loaded.  Then fill in the fields and press "Submit Record".
+
+<p>
+You can search for subjects by clearing the record, typing info in one
+or more fields, and hitting Enter or clicking the "Find Record"
+button.  The record must match all fields you have entered.  You can
+use regular expression style patterns when entering search info, and
+anything you enter (except in the Code field) will be a match if it
+matches the first part of the actual value, even if it doesn't match
+the whole thing.
+<p>
+Thus, you could find a subject by typing in his first and last initials.  When
+entering the code, you don't need to use the initial 0's.  Case doesn't
+matter.  If the search matches more than one subject, you will be able to
+select the correct one off a list.
+<p>
+Once a subject has been called up, you can edit any of the fields (except the
+Code), by clicking on them and typing.  Pressing "Update Record" will update
+the database.  In the Tcl interface, any fields that have been changed but not 
+stored will be pink.
+<p>
+The pulldown menu after "Available For:" contains the experiments the subject
+can still run without conflicts.  They are in order of preference.  When a
+subject has run an experiment, select it from the menu and click "Did It!".  With the web interface, just click the <img src="Images/add.gif"> next to the experiment.
+It will assume the experiment was run on the current day.  You do not need to
+Submit after adding an experiment session.  The Submit is only for the personal
+information in the table at the top.
+<p>
+If an experimental session was mistakenly submitted, you can remove it by
+double clicking, in the Tcl interface, or by clicking the <img src="Images/remove.gif"> in the web interface.
+
+
+<h3>Files</h3>
+<p>
+The database is stored in three files.  Subjector assumes the files are in the
+directory in which the subjector executable is located.
+<p>
+<b>If you are using the web interface, these files must be writable by
+your web server.  If you are using an apache server under Linux, you
+may need to do the following:
+<pre>
+% chgrp apache subjects sessions experiments
+% chmod g+w subjects sessions experiments</pre>
+</b>
+
+<p>
+The <i>experiments</i> file lists the current experiments in order of
+preference.  This file should be edited by you in your favorite text
+editor.  The first column is the experiment name, the second is the
+expected running time and the third is the list of all conflicting
+experiments.  This list should be enclosed in curly braces.  It can
+include experiment names or regular expression patterns that match
+experiment names.  For example, "NRRC.*" will match all experiments
+starting with NRRC.  Experiment names can't have spaces.
+<p>
+The <i>subjects</i> file lists the non-experiment data for each subject.  The
+columns are:
+
+<table>
+<tr><td>1 <td>Code
+<tr><td>2 <td>Last
+<tr><td>3 <td>First
+<tr><td>4 <td>Email
+<tr><td>5 <td>Phone
+<tr><td>6 <td>Contact
+<tr><td>7 <td>DOB
+<tr><td>8 <td>Race
+</table>
+
+<p>
+The Contact field should be Y for contact, N for no contact, G for gone, and
+DNR for "Do Not Run".  This means the subject has been bad in the past and
+should not be used again.  If a subject is DNR, Subjector will beep when the
+subject is called up.  The web interface will print a warning in red.
+<p>
+The "sessions" file contains one line for each time a subject does an
+experiment.  The first column is the subject code, the second is the experiment
+name, and the third is the date.
+<p>
+Normally there should be no need to edit the <i>subjects</i> and
+<i>sessions</i>.  However, you may need to edit dates for sessions that were not 
+completed on the day they were logged, if that is important to you.
+
+
+<h3>Contacting Eligible Subjects</h3>
+<p>
+The Tcl/Tk version of Subjector can be used to list the emails of subjects who wish to be contacted and are eligible for a full sessions worth of experiments.  Subjects are only listed if they have a contact value of "Y", they have an email address, and they are eligible for at least 50 minutes of experiments.  Conflicts between
+experiments are taken into account, under the assumption that experiments are
+conducted in priority order.
+<pre>
+subjector -r &lt;min> &lt;max> [-m <message_file>]</pre>
+<p>
+The command line argument "-e <min> <max>" will identify all eligible subjects
+whose id falls in the range [min, max].  After listing the ids and emails,
+Subjector will quit.  If the "-m <message file>" argument is given before the
+-e, then the message in the specified file will be sent to each of the
+eligible subjects with an email address.  This requires that the <i>mail</i>
+program be working on your computer.  Specifying the min and max id numbers
+allows you to contact a limited set of subjects at a time.
+
+
+<h3>Reporting the Race of Subjects</h3> 
+<p>
+For grant purposes, it is often necessary to tabulate the race of the subjects
+participating in your experiments.  The following command will print out ID,
+name, and race of the subjects who participated in the given experiment:
+<pre>
+subjector -r <experiment></pre>
+
+<p>
+<hr>
+Written by <a href="mailto:dr+linger@tedlab.mit.edu">Doug Rohde</a><br>
+Copyright 2001, 2002

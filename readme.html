@@ -1,0 +1,1253 @@
+<html>
+<head>
+<title>Linger: Documentation</title>
+</head>
+<body bgcolor=white>
+<h1>Linger Documentation</h1>
+<h4>Version 2.88</h4>
+<hr>
+
+
+<p>
+Linger is a Tcl/Tk application that performs a variety of language
+experiments, particularly self-paced reading.  Because it is
+Tcl/Tk-based, it is easily modified and runs on all major platforms:
+Unix, Windows, and Mac.
+
+<p>
+Linger can be used with just about any left-to-right horizontal language for
+which a font is available.  It handles true/false, multiple choice questions,
+and difficulty ratings, as well as audio playing and recording.
+<p>
+It currently includes the following experiment types:
+
+<ul>
+<li> <a href="#masked-self">Masked Self-Paced Reading</a> and/or <a href="#listening">Listening</a>
+<li> <a href="#center-self">Centered Self-Paced Reading/Listening</a>
+<li> <a href="#masked-auto">Masked Auto-Paced (fixed rate) Reading/Listening</a>
+<li> <a href="#center-auto">Centered Auto-Paced Reading/Listening</a>
+<li> <a href="#block">Block Reading</a>
+<li> <a href="#sal">Speak and Listen (two subjects, one reading, one listening)</a>
+<li> <a href="#listen-answer">Listen (to a reader) and Answer</a>
+<li> <a href="#apld">Auditory Prime Lexical Decision (listen, then do a LD)</a>
+</ul>
+
+<p>
+These different experiment types are explained in their own sections
+below.  Many variations on these experiments are possible by
+overriding default parameters in an experiment preferences file.
+Additional experiment types can be created by adding new code to the
+preferences file.  For example, Linger can also be used to generate
+HTML questionnaires.
+
+<h3>Getting Started</h3>
+
+To run Linger, you must have a working version of Tcl/Tk installed.
+To obtain this, read the instructions for your machine type.
+
+<h4>Linux</h4>
+
+<p>
+Tcl/Tk comes pre-installed on most Linux machines.  Just check that
+you have an executable named <i>wish</i>.  If not, Tcl/Tk can be
+obtained from your favorite RPM site, or from the <a
+href="http://www.scriptics.com" target="other">Tcl/Tk website</a>.
+
+<p>
+To run Linger, simply execute the linger.tcl program, which should be
+marked executable.
+
+
+<h4>Windows</h4>
+<p>
+To run Linger on Windows, you will need to install Tcl/Tk.  To do that, go to
+the <a href="http://www.scriptics.com" target="other">Tcl/Tk website</a> and
+follow the links for downloading the latest ActiveTcl distribution.  Once
+Tcl/Tk and Linger are installed you should be able to run Linger by simply
+double clicking on the linger.tcl file, which should have an icon that looks
+like a feather.
+<p>
+On Windows you may find that the Tcl/Tk window doesn't completely fill the
+screen and that the mouse remains visible.  I can't find any way around these
+problems.  I recommend moving the mouse to the edge of the screen once you
+start an experiment.
+<p>
+To figure out which fonts are available on your machine, run Wish (this comes
+with Tcl/Tk) and type "<tt>font families</tt>".
+
+
+<h4>Macintosh OS X</h4>
+
+First <a
+    href="http://www.apple.com/downloads/macosx/unix_open_source/tcltkaqua.html">
+   install the latest Tcl/Tk Aqua</a>.  Once that is installed, you should be
+    able to run linger.tcl from the Terminal command line in the same way you
+    would for Linux.
+<p>
+Or you can go to the Linger directory and double click the Linger.sit
+file. This will create an AppleScript file called Linger. Double click that
+file to run Linger. Note that the Linger window may not pop to the front when
+it starts.
+
+
+<h4>Macintosh OS 9</h4>
+
+First install Tcl/Tk, as explained on the <a
+href="http://www.scriptics.com" target="other">Tcl/Tk website</a>.
+The OS 9 version of Tcl/Tk should come with a program called "Drag &
+Drop Tclets".  Simply drag the linger.tcl file onto this icon and it
+will generate an executable.  I suggest you name it Linger.  The first time
+you run "Drag & Drop Tclets" it will ask you for a stub to clone.  Select the
+Wish application that is in the same directory as "Drag & Drop Tclets".
+<p>
+On the Mac, you will find that the toolbar menu at the top and the mouse
+remain visible.  I don't know any way around this.  I recommend moving the
+mouse to the edge of the screen once you start an experiment.
+<p>
+To figure out which fonts are available on your machine, run <b>wish</b> (this comes
+with Tcl/Tk) and type "<tt>font families</tt>".
+
+
+<h3><a name="packages">Sound and Images</a></h3>
+<p>
+Linger is able to play and record sounds and work with a variety of image
+types.  However, you may need to use some Tcl/Tk extension packages to get the
+full functionality.  In order to display JPEG images, you will need the
+<b>Img</b> package.  To include it, place this at the top of your preferences
+file:
+
+<pre>
+package require Img</pre>
+
+The <b>Snack</b> package is recommended for playing sounds and is required for
+recording them.  It will be included automatically if it is available.  To
+check its availability, run <b>wish</b> and type:
+
+<pre>
+package require snack</pre>
+
+The Img and Snack packages are included in recent distributions for Windows
+and Macintosh OS X.  If you are running under Unix, you may need to download
+and install the packages from these web sites:
+<ul>
+<li><a href="http://members1.chello.nl/~j.nijtmans/img.html">Img Homepage</a>
+<li><a href="http://www.speech.kth.se/snack/">Snack Homepage</a>
+</ul>
+
+
+<h3>Running Linger</h3>
+<p>
+It is easiest to run Linger from within the main Linger directory,
+which contains linger.tcl.  If you want to run it from elsewhere under
+Linux, you must set the LINGER_HOME environment variable to point to
+the main Linger directory.  If the Linger directory is located in your home directory, you can do this as follows:
+<pre>
+export LINGER_HOME=${HOME}/Linger
+</pre>
+You may want to put this command in your .bash_profile file.
+
+<p>
+To run Linger on a Unix machine, simply run the linger.tcl script,
+which should be executable.  On a Windows machine, you can
+double-click the linger.tcl file.  On Mac OS 9, you can double-click the
+executable program you created with "Drag & Drop Tclets".  Under Max OS X, you
+can run linger.tcl from the command line, or you can double click on the
+Linger script, which is produced when you unpack the Linger.sit file.
+<p>
+When you start Linger, it will look in the Experiments subdirectory of the main
+Linger directory to find all available experiments.  Choose the one you want
+using the pull-down menu.
+<p>
+The subject number will be set to one more than the highest number for which
+data has been saved in the chosen experiment.  You can type a different
+subject number if you like.  The subject number must be an integer, because it
+determines which set of items will be selected.
+<p>
+If the subject number is blank or you select Test, the experiment will be run
+but no data will be collected.  If you choose a subject number for which data
+already exists, Linger will ask before overwriting the old data file.
+<p>
+While in the experiment, you can hit End to jump to the next screen or Esc to
+kill the program.  If you are in the middle of an experiment, you will have to
+confirm the exit.  If Linger is killed, any data collected so far will still
+be saved.  See the section on <a href="continuing">Aborting and Continuing
+Experiments</a>.
+
+
+<h4>The Notifier</h4>
+If Linger is run on a computer connected to the internet, it can send out an
+AOL instant message to let you know when a subject is done with the practice
+session and is starting an experiment and when the subject is nearly done
+(with four items left).  This may be useful if the subject is in another room.
+The file Notifier/experimenters contains a list of experimenter names and
+their AOL instant messenger ids, as in:
+<p>
+<pre>
+Doug	DougTheMan
+John	johnny87
+{Duane Wayne} ddog1023
+</pre>
+
+<p>
+When you start Linger, if you choose one of these names from the
+pulldown menu, notifications will be sent to that address.
+
+
+<h3>Files and Directories</h3>
+<p>
+The Experiments directory should contain one subdirectory for each experiment.
+Each experiment directory contains a subdirectory called "Results".  This will
+contain the data files for each subject.  You don't need to create the Results
+directory.  It will be created when the first subject is run.
+<p>
+The experiment directory should also have the following files:
+
+<table>
+<tr><td><b>items</b>
+<td>contains the experimental and filler sentences and questions
+<tr><td><b>preferences</b>
+<td>contains commands that override the default preferences
+<tr><td><b>introduction</b>
+<td>contains commands that run the intro and practice trials
+<tr><td><b>break</b>
+<td>contains commands that run if a rest break occurs
+<tr><td><b>conclusion</b>
+<td>contains commands that run at the end of the experiment
+</table>
+
+
+<h3>The Items File</h3>
+
+The items file contains all of the experimental and filler sentences used in
+the experiment.  Blank lines can occur anywhere and are ignored unless they
+fall between two lines of sentence text.  Here is a sample entry in the
+sentence file:
+
+<pre>
+# e2 16 c
+There_were_two guitarists practicing at a_night_club.
+One made a living as a musician. The other only played for fun.
+A pianist played with the guitarist who@W played@verb for fun in a concert, and they got a record deal.
+? Did the guitarist who played for fun get a record deal? Y
+</pre>
+
+<p>
+Each item begins with a header.  The format of the header is:
+<pre>
+# experiment_name item_name condition_name
+</pre>
+
+<h4>Item Headers</h4>
+
+The header must begin with a <tt>#</tt> symbol, unless you choose a different
+<tt>HeaderMark</tt> symbol in the preferences.  The <tt>experiment_name</tt> is
+used to distinguish items drawn from multiple experiments used in the
+same subject run.  If you only have one experiment, set it to
+something like E1 for the experimental items.  <tt>item_name</tt> is
+the name of the item, which will probably just be a number.
+<tt>condition_name</tt> is the name of the condition, which might be a
+number or letter or any combination.  The three <tt>*_name</tt> fields
+cannot contain colons (<tt>:</tt>) or whitespace.
+<p>
+A filler item must be given the <tt>experiment_name</tt> "<tt>filler</tt>".
+The condition_name will be ignored, but must be specified.  It is best
+to set it to "<tt>-</tt>".  Practice items can also be included in the items
+file.  They must be given the <tt>experiment_name</tt> "<tt>practice</tt>".
+Practice items will not be shown during the experiment, but you can choose to
+present them during the introduction using the <i>presentItem</i> command.
+
+<h4>Sentences</h4>
+
+Following the header is (are?) one or more lines containing the sentence(s).
+The sentence lines can't begin with a <tt>?</tt>, <tt>!</tt>, or
+<tt>#</tt>.  Each new line in the sentence file will start a new line
+in the display.  If you don't wrap the lines yourself, any line that
+is too long for the display will be wrapped for you.
+
+<p>
+Using the default font on a 1024x768 display, you should be able to fit 100
+characters on a line.  If your items are longer than one line, be sure to
+consider where the line breaks might fall and how this could bias your
+results.  It is probably best if the line breaks occur between sentences or
+during a non-critical region.  If lines are too long to fit on the screen,
+Linger will wrap them for you.  You may want to avoid this.  You can check if
+any lines are too long by running Linger with the <tt>-c</tt> command-line
+option.
+
+<p>
+The blank spaces (other than those at the beginning or end of a line) will be
+retained in the actual experiment.  So you should be sure that double spaces
+only appear where they should (after periods).
+
+<p>
+If you want several consecutive words to be revealed (in masked
+reading) as a block, they should be connected with underscores.  In
+the first line of the example, "There were two" appears as a block and
+"a night club" appears as a block.  On the other hand, if you want to
+split a word into two separate regions with no space between them, use
+a pipe symbol ("<tt>|</tt>") to split the words in the items file.
+This is often necessary in languages like Chinese which does not use
+spaces between the words.
+
+<p>
+Each word (or word block, really) has a tag, which will appear in the
+data file.  The default tag is <tt>-</tt>.  If you append
+<tt>@foo</tt> to a word, the word's tag will be set to "foo".  Tags
+can be used to identify the words of interest in your experiment.
+You might tag the main verb with <tt>@mv</tt> and the noun following
+it with <tt>@obj</tt>.  Then you can easily extract reading times of
+interest from the data file by selecting lines whose tag column
+matches a certain tag.
+
+<p>
+You could also use tags to label the words in regions of interest.  If you
+have regions A, B, and C, you might label the words: A1 A2 A3 B1 B2 C1 C2,
+etc.  Then you can easily compute region-by-region averages by extracting the
+lines in the results file with matching tags.
+
+<p>
+Important note: If your regions of interest do not always start and
+end on the same word number (or word block number, really) for every
+item in a given condition, you must use tags to label the regions.
+Otherwise, once the experiment is done it will be extremely difficult
+to analyze the data because the regions won't line up.
+
+<p>
+If a word is given an empty tag, meaning that nothing follows the <tt>@</tt>,
+it will be a static word.  Static words are not masked during self-paced
+reading and are visible throughout the sentence.  No data will be recorded for
+them in the results file.  Static words might be used to identify the speakers
+in a dialogue.
+
+
+<h4>Questions</h4>
+
+Linger supports true/false and multiple choice questions, as well as
+collecting ratings.  Each item can be followed by one or more questions.  They
+can be of mixed type, but I don't recommend it.
+<p>
+
+Each type of question must be on a single line, starting with a special
+symbol.  If you want to have a line that is part of an item's sentence, but
+which should begin with one of the marks that identify a question or item
+header (#?!*), you can precede the mark with a backslash (\), which will be
+stripped off but which will prevent the line from being treated as a question
+or header.
+
+<h5>True/False</h5>
+In the items file, true/false questions consist of a single line beginning
+with a question mark, followed by the question, and finally the answer.
+Answers should be Y or N (not yes or no).  Here's an example:
+
+<pre>
+? Did the guitarist who played for fun get a record deal? Y
+</pre>
+
+<p>
+Optionally, the first <tt>?</tt> can be immediately followed by a tag,
+as in <tt>?q1b</tt>.  In this case, the question is given the tag
+"q1b".  The tag is included in the results file.  This can be useful
+in cases where several different types of questions are used and you
+would like to perform separate analyses on them.
+
+<h5>Multiple Choice</h5>
+
+Multiple choice questions are introduced by an exclamation point, rather than
+a question mark.  Following the question is a list of possible answers,
+enclosed in curly braces, and then the correct answer.  If the answers consist
+of multiple words, underscores should be used instead of spaces.  These will
+be replaced with spaces in the display.  Alternately, you may put double
+quotes around multi-word choices.  There may be one or more correct answers.
+In that case, place the correct answers within curly braces, just like the
+list of choices.  If there is a single correct answer and it has multiple
+words and you are using double quotes instead of underscores, you must still
+use the curly braces around the correct answer.  That is why using underscores
+is recommended.
+<p>
+Here's an example with a single correct answer using underscores versus double
+quotes:
+
+<pre>
+!foo The ________ ate the flowers. {cat dog pink_pig fat_baby} pink_pig
+!foo The ________ ate the flowers. {cat dog "pink pig" "fat baby"} {"pink pig"}
+</pre>
+
+<p>
+In this case, the question has been given the tag "foo".  Here is how it would
+look with two possible answers:
+
+<pre>
+!foo The ________ ate the flowers. {cat dog pink_pig fat_baby} {pink_pig dog}
+!foo The ________ ate the flowers. {cat dog "pink pig" "fat baby"} {"pink pig"
+dog}
+</pre>
+
+You can place double quotes around single-word answers if you want.  It
+doesn't matter.
+
+<p>
+The following variables can be set in the preferences file to alter the way
+questions are asked:
+
+<pre>
+# If true, multiple questions are randomly ordered:
+set QuestRand    0
+# This is the number of questions asked per item.  If it is the null string,
+# all are asked:
+set QuestNum     {}
+# The probability of asking each question if one or more is available:
+set QuestProb    1.0
+</pre>
+
+If an item has four questions, all of them will be asked by default, in the
+order given.  If you set <tt>QuestRand</tt> to 1, they will be randomly
+ordered.  If you set <tt>QuestNum</tt> to 2, only the first two questions will
+be asked.  If you set <tt>QuestRand</tt> to 1 and <tt>QuestNum</tt> to 2, then
+two of the four items will be asked, in random order.  If you set
+<tt>QuestProb</tt> to 0.5, then each of the questions will be asked with 50%
+probability, which could mean that none are asked, or all of them.  If you set
+<tt>QuestNum</tt> to 3 and <tt>QuestProb</tt> to 0.5, then three of the four
+items will be chosen initially, and then they will each be asked with 50%
+chance, so you will get from 0 to 3 questions.
+<p>
+If you need more customized question asking behavior, you can override the
+<tt>chooseQuestions</tt> procedure, which does the job of choosing the
+questions to ask for each item.  For example, you may have two types of
+question (about the first clause versus the second clause), with three
+questions of each type, and you want to ask exactly one question of each type.
+In that case, you would ise the question tag to label its type and write your
+own <tt>chooseQuestions</tt> procedure to make use of this label.
+
+<h5>Fill-in-the-Blank</h5>
+
+Fill-in-the-Blank questions are preceded by an asterisk (*).  The question
+should be all on one line in the items file, although it may be wrapped in the
+display.  There are no answers following the question.  In the results file,
+the QCRC column will always be 1, indicating correct.  You will have to do
+your own correctness analysis.
+<p>
+The width of the entry box for typing the answer is controlled by the
+FillInBlankWidth variable.  It defaults to 50.  The entry box will scroll, so
+subjects may type more than this if they want.
+
+
+<h4>Fillers and Combining Multiple Experiments</h4>
+
+If you are running a single experiment, you will want at least as many fillers
+as you have items, or subjects may detect the pattern in your items.  At least
+60% fillers is advisable for most experiments.  The more consistent and
+unusual your items, the more fillers you will need to disguise them.
+<p>
+It can be more efficient, however, to run items from multiple experiments in
+the same session.  The items from different experiments will serve as fillers
+for each other.  Of course, you would want those experiments to use different
+sentence types.  One experiment using sentential complements would not make a
+good set of fillers for another experiment using sentential complements.
+<p>
+Normally, you will want the number of subjects who run an experiment to be a
+multiple of the number of conditions in the experiment to balance the number
+of subjects in each condition for each item.  If you are combining several
+experiments with different numbers of conditions, the naive thing to do would
+be to run as many subjects as the least common multiple of the two condition
+numbers, or some multiple thereof.  However, if you had three experiments with
+4, 5, and 7 conditions, you would need 140 subjects to balance the conditions
+in this way.
+<p>
+A smarter thing to do is to run at least enough subjects for each experiment
+individually, and then discard the data for the last few subjects for an
+experiment if the number of subjects is not a multiple of the number of
+conditions for that experiment.  So, in this example, you might run 49
+subjects.  All of them will be used for the experiment with 7 conditions.  The
+last 4 will be discarded for the experiment with 5 conditions, and the last 1
+will be discarded for the experiment with 4 conditions.
+
+
+<h4>Errors</h4>
+
+The most common source of errors when using Linger is bad formatting in the
+items file, such as a missing or extra parenthesis or curly brace.  If Linger
+dies with an error message after you have chosen the experiment, the error
+could be due to the items file.  In this case, run Linger from the
+command-line using the "-v 1" option.  This increases the verbosity level,
+causing it to print out each items file line as it is parsed.  The last line
+printed before Linger aborts may be the culprit.
+
+
+
+<h3>The Introduction, Break, and Conclusion Files</h3>
+
+<p>
+The introduction, break, and conclusion files define the start, rest periods,
+and end of the experiment, respectively.  Each file is just a Tcl script, so
+you could actually do arbitrarily complex things with them.  But there are
+some default commands that are normally used.  They are as follows:
+
+<pre>
+instruct {This is the first line of the text.
+This is the second line.
+This is the third.}
+</pre>
+
+<p>
+The <i>instruct</i> command prints some text in the small font and
+then waits for a key press to continue.  The text will automatically
+be wrapped if the lines are two long, but you can put your own line
+breaks in as well.  Lines will be left justified.  This is useful for
+giving instructions in the introduction file.
+
+<pre>
+command {This is a big font command.}
+</pre>
+
+<p>
+The <i>command</i> command is similar to instruct but it uses a big
+font and centers the text.  It should be used for short messages, like
+"Here we go...".
+
+<pre>
+createItem {# practice 1 -
+This is a practice sentence.
+? Did you read the sentence? Y}
+</pre>
+
+<p>
+The <i>createItem</i> command is used to create a temporary item.  This is
+most often used to create practice items for immediate presentation.
+<i>createItem</i> takes one argument, which should be enclosed in curly braces
+and which should consist of an item description, just as it would appear in
+the "items" file.  You should give practice items the <tt>experiment_name</tt>
+"practice" and the condition name "-".  Practice items can also be defined in
+the items file.  As long as they have the <tt>experiment_name</tt> "practice",
+they won't be presented during the actual experiment.
+
+<pre>
+presentItem practice:1:-
+</pre>
+
+<p>
+The <i>presentItem</i> command runs a single item using the item-presentation
+function that is associated with the current experiment.  If the experiment is
+<i>selfPacedReading</i>, then the command that is actually run will be
+<i>selfPacedReadingItem</i>.  Normally this is used to immediately present a
+practice item that has just been created.  The argument consists of the
+<tt>experiment_name</tt>, <tt>item_name</tt>, and <tt>condition_name</tt> of
+the item, separated by colons.
+
+<p>
+The <i>break</i> file is run periodically to give the subjects a
+break.  Normally it will just contain something like:
+
+<pre>
+command {Time for a break.}
+</pre>
+
+<p>
+The <tt>BreakInterval</tt> variable determines the number of sentences
+between breaks.  If it is 0, no breaks will be offered.
+
+
+<h3>The Preference File</h3>
+
+<p>
+The preference file is also just a Tcl script file.  It will be run just after
+the experiment has been chosen.  The preference file should contain overrides
+to the preferences set at the top of the linger.tcl file.  You can override a
+parameter simply by setting it to a different value.  For example, if you want
+to put masks over spaces between words, you should set the <tt>MaskSpaces</tt>
+parameter to 1 as follows:
+
+<pre>
+set MaskSpaces 1
+</pre>
+
+<p>
+You can customize many different aspects of Linger in the preference file,
+including the experiment type, the display fonts, the response keys, the
+various timing delays, the names of the other files, the frequency of rest
+breaks, the frequency of questions, the feedback messages for right or wrong
+answers, and even the special symbols used in the items file.
+
+<p>
+To see all the variables that can be customized, with short descriptions, just
+read the top of the <i>linger.tcl</i> file.
+
+<p>
+If you want to do more profound customizations, such as creating a new
+experiment type, you should place the code in the preferences file.  The
+preferences file will be read after most of the linger.tcl file, so you can
+also override any of the functions that are defined in linger.tcl by
+re-defining them.
+
+
+<h4>Difficulty Ratings</h4>
+
+In any of the standard experiment types, subjects can be asked to rate the
+difficulty or some other aspect of the item.  This does not require any
+addition to the items file.  In order to collect ratings, put this in the
+preferences file:
+
+<pre>
+set CollectRatings 1</pre>
+
+The rating will be presented after the sentence, but before any other
+questions.  Subjects can respond my clicking with the mouse or using the
+number keys.  These options affect the ratings:
+
+<pre>
+# The maximum value of the rating scale:
+set RatingChoices 7
+# The message presented along with ratings:
+set RatingMessage "How difficult was it to understand that sentence?"
+# The label at the low end of the rating scale:
+set RatingEasy "Very Easy"
+# The label at the high end of the rating scale:
+set RatingHard "Very Hard"</pre>
+
+The rating and response time are stored in the <a href="#results">Results
+file</a>.
+
+
+<h3><a name="continuing">Aborting and Continuing Experiments</a></h3>
+
+If the Esc key is pressed while Linger is running, or it is killed in some
+other way, it is possible to resume the experiment where it left off.  This is
+useful if you have subjects who may not be able to sit through a full
+experiment.
+<p>
+The items that the subject would have seen are stored in a file in the Results
+directory whose name is the subject number, with the extension .itm.  If you
+run Linger again and choose the same experiment and subject number and this
+file is found, you will be asked if you want to continue where you left off.
+<p>
+If you do choose to continue, the items will be loaded from the .itm file.
+Linger will then read the .dat file to figure out where the previous run left
+off.  The new results will be appended to the .dat file.
+<p>
+When you continue an experiment, you may not want to make the subject go
+through the entire introduction again.  In your introduction file, you can
+check the "Continuing" variable to determine if this is a continuation.  Here
+is how you might do that:
+<pre>
+if {$Continuing} {
+  <i>put code here that is run when continuing</i>
+} else {
+  <i>put code here that is run for a new subject</i>
+}</pre>
+
+
+<h3><a name="results">The Results Files</a></h3>
+
+<p>
+Unless it is in "test" mode, Linger will write a data file to the Results
+subdirectory of the experiment directory.  The file name will be the subject
+number followed by ".dat".  The data file contains both the reading times and
+the question answering correctness and response time.
+
+<p>
+Each line in the data file contains a single observation and has 8 columns.
+The columns are separated by whitespace.  The columns for a reading time
+response will be:
+
+<pre>
+subject_num experiment_name item_name condition_name word_num word word_tag time
+</pre>
+
+<p>
+The <tt>word</tt> is the actual word or region, from which you can get the word length.
+<br>
+The <tt>word_tag</tt> is its tag.
+<br>
+The <tt>time</tt> is in milliseconds.
+
+<p>
+The columns for a T/F question will be:
+<pre>
+subject_num experiment_name item_name condition_name ?tag answer correct time
+</pre>
+<p>
+The <tt>answer</tt> is the actual response given (1 for yes, 0 for no).
+<br>
+The <tt>correct</tt> field is 1 if the response was correct, 0 if wrong.
+<br>
+The <tt>tag</tt> is the tag that followed the ? in the items file.
+
+<p>
+The columns for a multiple-choice question will be:
+<pre>
+subject_num experiment_name item_name condition_name !tag answer correct time
+</pre>
+<p>
+The <tt>answer</tt> is the actual response given by the subject.
+
+<p>
+The columns for a difficulty rating will be:
+<pre>
+subject_num experiment_name item_name condition_name %tag answer {} time
+</pre>
+<p>
+The <tt>answer</tt> is the response given by the subject.  There is no correct
+answer, so the 7th column is the null string.
+
+
+<h3>Command-Line Arguments</h3>
+
+Normally Linger is run without any command-line arguments.  However, you can
+use arguments to avoid the experiment-choosing window or to use special modes.
+The following arguments are recognized:
+
+<table>
+<tr><td width=100>-e experiment<td>This sets the experiment name, causing it to skip the
+experiment-choosing window.
+<tr><td>-s subject<td>Sets the subject number.  If -e is used and this is not,
+the next available subject number will be used.
+<tr><td>-t<td>Runs in testing mode, so no data will be recorded.
+<tr><td>-b<td>Runs in batch mode, which is non-interactive.  This can be used
+to have Linger perform special functions, like spewing out information for an
+HTML form.
+<tr><td>-c<td>This causes Linger to check the length of the lines in every
+item and report those that will wrap.
+<tr><td>-v #<td>Sets the verbosity level.  1 prints out the lines in the items
+file as they are parsed, which is useful for finding the source of errors.  2
+prints out lots of info as the experiment runs.
+</table>
+
+<p>
+To check the length of all of the items in experiment Exp1, you could do this:
+<pre>
+linger.tcl -e Exp1 -c</pre>
+
+
+
+<h3><a name="masked-self">Masked Self-Paced Reading</a></h3>
+<p>
+Masked self-paced reading requires the subject to press a key (the spacebar by
+default) to reveal each word or block of words.  A block of words is simply a
+group of words that appear together.  They are joined by underscores in the
+items file.  Hidden words are masked by dashes.  By default these don't cover
+spaces and have small gaps between characters.
+<p>
+This is the default experiment type, so the preferences file could be empty if
+you just want the standard behavior.  Here are some options that you may want
+to override:
+<pre>
+# The font used for the sentences:
+set TextFont     "-family {courier new} -size -14 -weight bold"
+
+# Should spaces within blocks be masked:
+set MaskJoins    0
+# Should spaces between blocks be masked:
+set MaskSpaces   0
+# The gap between mask dashes (in pixels):
+set MaskGap      1
+# The number of blocks to show at once with a moving window:
+set WindowSize   1
+
+# The key to see the next word:
+set GoKey        space
+# The key to respond no:
+set NoKey        f
+# The key to respond yes:
+set YesKey       j
+
+# The delay (in msec) before presenting each sentence:
+set PreDelay     1000
+
+# The reward message, leave blank for no feedback:
+set RightAnswer  ""
+# The error message, leave blank for no feedback:
+set WrongAnswer  "Oops.  Wrong answer."
+# The time the feedback message stays on the screen:
+set FeedbackDelay 1500
+</pre>
+<p>
+If the <tt>RightAnswer</tt> or <tt>WrongAnswer</tt> message is left
+blank, no feedback will be given in that case.
+<p>
+If a word is given an empty tag (by appending an @ symbol to the word), it
+is a "fixed" word, which means it remains on the screen permanently and no
+timing data is recorded for it.  If such a word appeared in the middle of a
+sentence, the moving window would jump over it.
+<p>
+The moving window can be made larger than a single block by changing the
+<tt>WindowSize</tt> parameter.  In this case, it will really appear to be more
+like a window moving over the sentence.  Fixed words do not participate in the
+moving window.  The reading time is recorded as if it applies to the first
+word in the window.
+
+
+<h3><a name="listening">Self-Paced Listening</a></h3>
+
+Word-by-word listening can be used instead of or in conjunction with reading
+in any of the self-paced or auto-paced experiments.  In order to play the
+words, you will want to use the <a href="#packages">Snack package</a>.  It is
+possible to play words with an external application, but the timing will not
+be as accurate.  In order to play word-by-word audio, put this in the
+preferences file:
+
+<pre>
+set PlayWords 1</pre>
+
+If you don't want to display the words at the same time, use this option as
+well: 
+
+<pre>
+set ShowWords 0</pre>
+
+A variety of sound formats can be used, although WAV files are standard.  By
+default, Linger will expect the first word of experiment E1, item 4, condition
+b in the following location:
+
+<pre>Audio/E1-4-b/E1-4-b-1.wav</pre>
+and the second word in file:
+<pre>Audio/E1-4-b/E1-4-b-2.wav</pre>
+
+The Audio directory, in this case, is a subdirectory of your experiment
+directory.  You can change the name of the audio directory as well as the mark
+used to separate the elements of the item name and the extension of the sound
+file by changing these options in the preference file:
+
+<pre>
+# The subdirectory in which audio is stored.  For self-paced listening, this
+# needs a subdirectory for each item:
+set AudioDir     "Audio"
+# This separates an item's exper., item, condit., and word in audio filenames:
+set AudioJoinMark "-"
+# The extension on audio files:
+set AudioExtension "wav"
+</pre>
+
+Note that each item and condition gets its own subdirectory within the main
+audio directory.  If a sound file is missing, a beep will be placed in place
+of the word and an error message will be printed to standard error.
+
+
+<h3><a name="center-self">Centered Self-Paced Reading</a></h3>
+<p>
+In centered self-paced reading, the words or phrases appear roughly in the
+center of the screen, with no masking.  In the preferences file, you will need
+to set the experiment type:
+<pre>
+set Experiment centerSelfPacedReading
+</pre>
+
+<p>
+By default, the words are not actually centered, but left justified a certain
+distance to the left of the center.  This is generally better because it
+allows the reader to always saccade back to the same point to read the next
+word.  You can adjust whether the words are actually centered, and the
+distance from the center on which they are aligned:
+
+<pre>
+# When doing center*PacedReading, if the words are left justified relative to 
+# one another:
+set CenterLeftAligned  1
+# When doing center*PacedReading, the amount the words are shifted to the left
+# from the middle of the screen:
+set CenterLeftShift  50
+</pre>
+
+Before the first word appears, there will be a crosshair on which subjects can
+fixate, to indicate the impending start of a sentence.  If the words are
+left-aligned, it is best if the crosshair appears one or two characters to the
+right of the alignment point.  The location and size of the crosshair can be
+adjusted with these parameters:
+
+<pre>
+# The size of a fixation crosshair:
+set CrossSize    10
+# The amount the crosshair is shifted up from center:
+set CrossUpShift 0
+# The amount the crosshair is shifted left from center:
+set CrossLeftShift 0
+</pre>
+
+The delay during which the crosshair is visible is set by this:
+
+<pre>
+# The delay (in msec) before presenting each item:
+set PreDelay     1000
+</pre>
+
+And the duration of blank screen between the crosshair and the first word is:
+
+<pre>
+# The delay before the first word in auto-paced reading (and centerSelfPaced):
+set AutoPacedInitDelay 1000
+</pre>
+
+
+<h3><a name="masked-auto">Masked Auto-Paced Reading</a></h3>
+<p>
+Auto-paced reading is like self-paced reading, except that it isn't self
+paced.  The word blocks are revealed at a fixed rate.  To use auto-paced
+reading, add the following to the preferences file:
+<pre>
+set Experiment autoPacedReading
+</pre>
+
+Most of the options useful for self-paced reading are also useful here.  Two
+addition parameters are:
+
+<pre>
+# The delay between words in auto-paced reading:
+set AutoPacedDelay 400
+# The delay before the first word in auto-paced reading:
+set AutoPacedInitDelay 1000
+</pre>
+
+
+<h3><a name="center-auto">Centered Auto-Paced Reading</a></h3>
+
+Centered auto-paced reading is like centered self-paced reading, except that
+it isn't self paced.  The word blocks are revealed at a fixed rate.  To use
+this, add the following to the preferences file:
+
+<pre>
+set Experiment centerAutoPacedReading
+</pre>
+
+Most of the options useful for centered self-paced reading are also useful
+here.  The one additional parameters is:
+
+<pre>
+# The delay between words in auto-paced reading:
+set AutoPacedDelay 400
+</pre>
+
+
+<h3><a name="block">Block Reading</a></h3>
+
+This is a simple paragraph reading experiment.  The sentence or sentences are
+shown all at once and the subject presses a key when he or she is done
+reading.  The reading time and the question answering times are recorded in
+the Results file.
+
+<p>
+The following variables are useful:
+<pre>
+TextFont
+TextColor
+PreDelay
+</pre>
+
+
+<h3><a name="sal">Speak and Listen</a></h3>
+
+This is an experiment for two subjects running simultaneously on two
+computers.  One subject, the speaker, will read sentences out loud and will be
+recorded.  The other subject, the listener, will listen to the speaker and
+then answer questions and/or report difficulty ratings.  In order to record
+the speaker, you must have the <a href="#packages">Snack package</a> installed.
+<p>
+When starting Linger, the two subjects must be given the same subject number,
+so the item ordering can be synchronized.  In order to ensure that the
+subjects see the same item ordering, the random number generator will be
+re-seeded using the subject number before randomizing the item order.
+<p>
+Instead of setting the Experiment variable to speakAndListen, you must run
+this command in the preferences file:
+<pre>
+speakAndListenInit</pre>
+
+This will present a dialog box that allows you to indicate whether the subject
+is the speaker or listener.  This will set the SALRole global variable to
+either "Speaker" or "Listener".  Then, in the introduction file, you can check
+this variable in order to present different instructions to the speaker and
+listener as follows:
+
+<pre>
+if {$SALRole == "Speaker"} {
+  <i>put the speaker's introduction code here</i>
+} else {
+  <i>put the listener's introduction code here</i>
+}</pre>
+
+This variable sets the message shown to the speaker at the start of each item:
+
+<pre>
+set SpeakerWaitMessage "Wait until the listener is ready."</pre>
+
+If the subject number is 5, the speaker's data will be stored in the file
+Results/5S.dat and the listener's in Results/5L.dat.  For the speaker it
+records the reading time prior to speaking and the speaking time.  For the
+listener it records the listening time and the question responses.
+<p>
+The audio recordings are stored in a subdirectory of the Results directory
+whose name is the subject number.  The file name will be composed of the
+experiment name, item number, and condition, joined by the
+<tt>AudioJoinMark</tt>, which defaults to "<tt>-</tt>".
+<p>
+You can change the rate and format of the sound recordings by setting the
+<tt>RecordOptions</tt> variable:
+
+<pre>
+# Flags for the SNACK recorder:
+set RecordOptions {-rate 44100}
+# -encoding Lin16 | Lin8offset | Lin8 | Lin24 | Lin32 | Float | Alaw | Mulaw
+# -rate 8000 | 11025 | 16000 | 22050 | 32000 | 44100 | 48000
+# see the Snack manual for other options</pre>
+
+
+
+<h3><a name="listen-answer">Listen and Answer</a></h3>
+
+This is a primitive form of the Speak and Listen experiment type.  It has the
+subject listen to someone else read a sentence and then answer a question
+about the sentence.  No sentences are actually presented by Linger, only the
+questions.  The sentences will probably be read by the speaker from a hard
+copy.
+
+<p>
+The following line should appear in the preferences file:
+<pre>
+set Experiment listenAndAnswer
+</pre>
+This option sets the message displayed while the subject listens to the
+sentence:
+<pre>
+# The message used in listenAndAnswer trials:
+set ListenMessage "Listen to the sentence"
+</pre>
+In this type of experiment, you probably don't want to randomize the order of
+the items.  Therefore, you should add:
+<pre>
+set RandomOrder  0
+</pre>
+
+<h3><a name="apld">Auditory Prime Lexical Decision</a></h3>
+
+In this task, a sound file is played while the subject looks at a fixation
+cross and then the cross is replaced by a word, on which the subject must
+perform a lexical decision.
+<p>
+This will only work on a system that is capable of playing a sound file from
+the command-line.  The command for playing a file is stored in the <tt>PlayAudio</tt>
+variable.  The default is appropriate for most Linux systems:
+<pre>
+set PlayAudio /usr/bin/play
+</pre>
+Other relevant variables are:
+<pre>
+# The size of a fixation crosshair:
+set CrossSize    10
+</pre>
+The test word is presented using the <tt>BigFont</tt>:
+<pre>
+set BigFont      "-family {helvetica} -size 24 -weight bold"
+</pre>
+In writing the items file, the name of the sound file should be used in place
+of the sentence and the question should just contain the lexical decision
+word:
+<pre>
+# APLD 1 a
+/home/foo/Primes/1a.wav
+? cantaloupe Y
+</pre>
+
+<h3>Using Non-English Languages</h3>
+
+Linger can be extended to non-English languages, including Chinese, Japanese,
+and Russian.  You will need to encode the items, introduction, break, and
+conclusion files using a language-specific extended-ASCII encoding, if they
+are to include any non-English text.  This can be done with Word and possibly
+with Wordpad or Notepad under Windows, or SimpleText on a Mac.
+<p>
+When you save the file, choose plain text (not rich text format) and then
+select the appropriate Unicode encoding for your language.  Try to save the
+files with no .txt extension.  If you can't save without an extension, try
+removing it once the file is saved.  You can also leave the .txt extension on
+the files, but you'll need to make a change to preferences, as explained
+below.
+<p>
+The preferences file itself must be in plain English.  In the preferences
+file, you need to tell Linger what encoding was used for the other files.  You
+do this by setting the LangEncoding variable.  For Chinese, the preferences
+file might include the following:
+<pre>
+set LangEncoding big5
+set TextFont "-family {song ti} -size -24 -weight bold"
+</pre>
+<p>
+This says that the encoding used on the experiment files is big5.  "Song ti"
+is a Chinese font available on most Linux machines.  Other fonts may be
+downloadable and others are probably available under Mac and Windows.
+<p>
+In order to see which encodings are available in Linger, run the program
+<b>wish</b> and, at the command line, run "encoding names".  The names won't
+be the same as those available in Word, but you will probably see the
+correspondence.  Make sure you choose the same encoding when you save the
+files as you do in the preferences file.
+<p>
+I recommend big5 or euc-cn for Chinese, enc-jp or jis0208 for Japanese,
+macCyrillic for Russian (on a Mac).
+<p>
+In order to see which fonts are available, run <b>wish</b> and type "font
+families".  Look for a name that is similar to a non-English font that you are
+used to using in Word or some other program.
+<p>
+If you were forced to save the introduction, items, and other files with a
+.txt extension, you will need to tell Linger about this by putting the
+following lines (whichever apply) in the preferences file:
+<pre>
+set ItemFile     "items.txt"
+set IntroFile    "introduction.txt"
+set BreakFile    "break.txt"
+set ConclFile    "conclusion.txt"
+</pre>
+
+<p>
+If you need to include encoded text in the preferences file (for example, if
+you are changing the WrongAnswer message), this may present a small problem.
+The desired encoding is not normally known until you set the
+<tt>LangEncoding</tt> inside the preferences file, and by that time it's too
+late to encode the file properly.  Most changes that would require non-English
+text can be done at the top of the introduction file instead of in the
+preferences file.  Otherwise, you should put the encoded portions of the
+preferences in another file, like preferences2.  Then you can put this line in
+the original preferences file, after you set the <tt>LangEncoding</tt>: 
+
+<pre>
+encSource preferences2
+</pre>
+
+
+<h3>How Items are Selected</h3>
+<p>
+Linger automatically decides which items to give to each subject in a
+round-robin sort of fashion based on the subject's number.  Subject 1
+will get the first condition of item 1, the second condition of item
+2, the third of item 3, and so on.  Subject 2 will get the second
+condition of item 1, the third of item 2, and so on.  Each subject
+will thus have 1 condition for each item and an as-even-as-possible
+number of sentences from each condition.
+
+<p>
+The number of different choices (different subject lists) will be the least
+common multiple of the number of conditions in each item.  If some items have
+4 conditions and some have 3, there will be 12 distinct lists, effectively.
+
+<p>
+If you drop a subject from the experiment and want to replace his
+data, it is a good idea to reuse their subject number with the next
+subject to fill in the hole.  Otherwise, the number of subjects per
+condition may not be balanced.  Of course, you will probably want to
+copy the original .dat file to a backup location before overwriting
+it.
+
+<p>
+Once the experimental sentences have been chosen for a particular
+subject, they are ordered.  If you want to present the items in the
+order specified in the items file, set the <tt>RandomOrder</tt>
+variable to 0 in the preferences file.
+<p>
+When ordering the items, items within each experiment are randomized
+and filler items and items from different experiments are interlaced.
+If possible, Linger will start with a filler item and no two items
+from the same experiment will be adjacent.  If the items are all from
+the same experiment, you should have at least as many fillers as
+items.  If you are running items from multiple experiments in one
+session, items from one experiment can act as fillers for the others,
+and fewer actual filler items may be necessary.
+
+
+<h3>Customizing Linger</h3>
+
+Many aspects of Linger's behavior can be customized by overriding global
+variables in the experiment's preferences file.  Other relatively minor
+modifications to existing experiment types can be achieved by copying one or
+more procedures from the linger.tcl file to the preferences file and modifying
+them.  All changes should be made in the preferences file, rather than in
+linger.tcl itself, so they don't need to be migrated to each new version of
+linger.tcl.
+<p>
+More advanced users may wish to create their own experiment types.  The best
+way to learn to customize Linger is to begin by becoming proficient with the
+Tcl/Tk language.  <a href="http://tedlab.mit.edu/~dr/Lens/tcltk.html">A simple
+tutorial is available here.</a> <a
+href="http://dev.scriptics.com/man/tcl8.3/index.html">The Tcl/Tk manual</a> is
+also very helpful for reference.
+<p>
+The next thing to do is to read the code in linger.tcl.  The most useful parts
+are the global variables at the top and the helper functions which follow
+them.  The helper functions are simple procedures that can be used to
+facilitate commonly performed operations.  They handle tasks such as opening
+files, printing warning and error messages, randomly sorting lists, measuring
+elapsed time, creating time delays, displaying various types of messages, and
+working with sounds.
+<p>
+The procedures for a new experiment can be written from scratch or based on
+copies of the procedures of an existing experiment.  Most experiments will
+have two primary procedures, although defining some additional helper
+procedures may be useful.  For example, the following procedures define the
+Auditory Prime Lexical Decision experiment type:
+
+<pre>
+proc auditoryPrimeLexicalDecisionItem item {
+  global QuestProb Question Sentence PreDelay
+  
+  loadSound $Sentence($item) snd
+  crossHairOn
+  after $PreDelay
+  playSound snd
+  crossHairOff
+  askQuestions $item BigFont center
+  deleteSound snd
+}
+
+proc auditoryPrimeLexicalDecision list {
+  standardExperiment auditoryPrimeLexicalDecisionItem $list
+}
+</pre>
+
+The <i>auditoryPrimeLexicalDecision</i> procedure is the main one that runs
+the entire experiment, other than the introduction and conclusion.  The name
+of this main procedure is the name of the experiment and it is what you must
+set the <i>Experiment</i> variable to.
+<p>
+The other necessary procedure is the item-presentation procedure.  Its name
+should be the same as the experiment, with "Item" appended to the end.  It
+takes as an argument the code for a single item and controls the presentation
+of the item and any questions that follow it.
+<p>
+The main experiment procedure takes a list of item codes as its argument.
+Most of these procedures simply call the <i>standardExperiment</i> procedure.
+This takes two arguments, the name of the experiment's item-presentation
+procedure and the list of items.  The <i>standardExperiment</i> runs through
+the list of items, calling the item presentation procedure on each one.  It
+also pauses for rest breaks and sends notifications at the appropriate time.
+<p>
+The <i>auditoryPrimeLexicalDecisionItem</i> procedure begins by declaring some
+global variables.  Any variables that exist outside of the procedure must be
+declared global before they are used.  It then calls the <i>loadSound</i>
+procedure to load the sound file.  The name of the sound file in this
+experiment type is given in the items file in place of the sentence.  So the
+global variable <tt>Sentence($item)</tt>, which normally contains a list of the
+sentence lines, actually contains a filename in this case.
+<p>
+The <i>crossHairOn</i> procedure displays a crosshair in the center of the
+screen.  The next line waits for a fixed delay.  Then the sound is played in
+blocking mode, which won't return until it is done.  Next, the crosshair is
+removed and the questions are asked.  The question, in this case, should
+consist of a word on which a lexical decision will be performed.  Finally, the
+sound is deleted to free up the memory it uses.
+
+
+
+<h3>Other Tools</h3>
+
+Linger includes a few other useful packages.
+
+<ul>
+<li><a href="Lingalyzer/readme.html">Lingalyzer</a> is used to analyze the .dat files produced by Linger to generate summary information and reports.  It can output the data to <i>anova</i> for analysis.
+
+<li><a href="Lingrapher/readme.html">Lingrapher</a> takes summary files generated by Lingalyzer and produces line graphs of reading times.
+
+<li><a href="Subjector/readme.html">Subjector</a> is a Tcl/Tk application that can be used to maintain a database of experimental subjects.
+
+<li>Some other tools are found in the Utilities subdirectory.
+</ul>
+
+<p>
+<hr>
+Written by <a href="mailto:dr+linger@tedlab.mit.edu">Doug Rohde</a><br>
+Copyright 2001-2003

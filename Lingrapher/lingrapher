@@ -1,0 +1,241 @@
+#!/bin/sh
+# the next line restarts using tclsh \
+exec tclsh "$0" "$@"
+
+set Version 1.21
+
+### Command-line arguments:
+# lingrapher condition-file avg-file graph-name [lingrapher-param-file]*
+
+### Find the lingraph directory:
+
+if {![info exists env(LINGER_HOME)]} {
+  if {[file executable lingrapher]} {set HOME .} \
+  else {
+    puts "If you run lingrapher from somewhere other than its home directory,"
+    puts "you must set the LINGER_HOME environment variable to point to the"
+    puts "main Linger directory."
+    exit
+  }
+} else {set HOME $env(LINGER_HOME)/Lingrapher}
+
+### Parse the command line arguments:
+
+proc usage {} {
+  global Version
+  puts "                 Lingrapher version $Version"
+  puts {Usage:}
+  puts {lingrapher condition-file avg-file graph-name [lingrapher-param-file]*}
+}
+
+if {[llength $argv] < 3} {usage; exit}
+set CondFile   [lindex $argv 0]
+set DataFile   [lindex $argv 1]
+set GraphRoot  [lindex $argv 2]
+set ParamFiles ""
+set GraceFiles ""
+
+for {set i 3} {$i < [llength $argv]} {incr i} {
+  lappend ParamFiles [lindex $argv $i]
+#  set a [lindex $argv $i]
+#  if {$a == "-l"} {incr i; lappend ParamFiles [lindex $argv $i]} \
+#  elseif {$a == "-g"} {incr i; lappend GraceFiles [lindex $argv $i]} \
+#  else {usage; exit}
+}
+
+### Read the condition file:
+
+proc addCondition {} {
+  global COND_NAME GRAPH_LABEL Conditions Label
+  append Conditions $COND_NAME
+  set Label($COND_NAME) $GRAPH_LABEL
+}
+
+set Conditions {}
+source $CondFile
+
+### Read the parameter files:
+
+set Overrides {}
+proc @ {args} {
+  global Overrides
+  append Overrides "@ $args\n"
+}
+
+source $HOME/default.lpm
+foreach f $ParamFiles {source $f}
+
+### Read the data file and figure out needed stats:
+
+# Data file format:
+# EXPT COND WNUM MEAN SERR
+
+set DatCol(EXPT) 0
+set DatCol(COND) 1
+set DatCol(WNUM) 2
+set DatCol(MEAN) 3
+set DatCol(SERR) 4
+
+set minY 10000
+set maxY -10000
+set minX 10000
+set maxX -10000
+set Cond -1
+set Ser  1
+set first {}
+
+set f [open $DataFile "r"]
+while {[gets $f line] != -1} {
+  foreach i [array names DatCol] {set $i [lindex $line $DatCol($i)]}
+  set condcode "$EXPT $COND"
+  if {![info exists Label($condcode)]} continue
+  if {$ErrorBars} {set minval [expr $MEAN - $SERR]} else {set minval $MEAN}
+  if {$ErrorBars} {set maxval [expr $MEAN + $SERR]} else {set maxval $MEAN}
+  if {$minval < $minY} {set minY $minval}
+  if {$maxval > $maxY} {set maxY $maxval}
+  if {$WNUM < $minX} {set minX $WNUM}
+  if {$WNUM > $maxX} {set maxX $WNUM}
+  if {[lsearch $Conditions "$EXPT $COND"] == -1} {
+    lappend Conditions "$EXPT $COND"
+    if {$first != {}} {
+      lappend Series "$Ser $lastexp $Cond $first $last";
+      incr Ser
+    }
+    incr Cond
+    set first {}
+  }
+  if {$first == {}} {set first $WNUM} \
+  elseif {$WNUM != [expr $last + 1]} {
+    lappend Series "$Ser $EXPT $COND $Cond $first $last"
+    incr Ser
+    set first $WNUM
+  }
+  set last $WNUM
+  set lastexp "$EXPT $COND"
+  set Value($EXPT.$COND.$WNUM) $MEAN
+  set StdErr($EXPT.$COND.$WNUM) $SERR
+}
+if {$first == {}} {
+  puts "No data matches conditions in the condition file."
+  exit
+}
+
+lappend Series "$Ser $EXPT $COND $Cond $first $last"
+close $f
+
+#puts "$minX $maxX $minY $maxY"
+#puts $Conditions
+#puts $Series
+
+### Open the graph
+
+set g [open $GraphRoot.agr "w"]
+
+### Read the Grace files and append to the output
+
+foreach file "$DefaultGPM $GraceFiles" {
+  set f [open $file "r"]
+  while {[gets $f line] != -1} {puts $g $line}
+  close $f
+}
+
+### Generate the axis bounds and labels
+if {$YMin == {}} {set YMin [expr floor($minY / 10 - 0.5) * 10]}
+if {$YMax == {}} {set YMax [expr ceil($maxY / 10 + 0.5) * 10]}
+#puts "$minY $YMin"
+#puts "$maxY $YMax"
+puts $g "@    world ymin $YMin"
+puts $g "@    world ymax $YMax"
+puts $g "@    world xmin [expr $minX - $XPadLeft]"
+puts $g "@    world xmax [expr $maxX + $XPadRight]"
+
+puts $g "@    yaxis  tick major $YInterval"
+
+puts $g "@    xaxis label \"$XAxisLabel\""
+puts $g "@    yaxis label \"$YAxisLabel\""
+
+puts $g "@    legend [lindex $LegendPos 0], [lindex $LegendPos 1]"
+
+### Generate the x axis labels
+
+puts $g "@   xaxis  tick spec [llength $XLabels]"
+set i 0
+foreach label $XLabels {
+  puts $g "@    xaxis  tick major $i, [expr $minX + $i]"
+  puts $g "@    xaxis  ticklabel $i, \"$label\\R{0}|\""
+  incr i
+}
+
+### Add any overrides from the @ command
+
+puts $g $Overrides
+
+### Read the SRS file into an array
+
+set f [open $DefaultSRS "r"]
+while {[gets $f line] != -1} {lappend SeriesDefaults $line}
+close $f
+
+### Generate the series parameters
+
+puts $g "@with g0"
+
+set lastcond {}
+foreach line $Series {
+  set series [lindex $line 0]
+  set EXPT [lindex $line 1]
+  set COND [lindex $line 2]
+  set condcode "$EXPT $COND"
+  set condnum [lindex $line 3]
+  if {$ErrorBars} {puts $g "@    s$series type xydy"} else {puts $g "@    s$series type xy"}
+  foreach i $SeriesDefaults {
+    set values [lindex $i end]
+    if {[llength $values] > 1} {
+      puts $g "@    s$series [lrange $i 0 [expr [llength $i] - 2]] [lindex $values $condnum]"
+    } else {puts $g "@    s$series $i"}
+  }
+  if {$condcode != $lastcond} {puts $g "@    s$series legend \"$Label($condcode)\""}
+  set lastcond "$condcode"
+}
+
+### Generate the actual data
+
+foreach line $Series {
+  set series [lindex $line 0]
+  set EXPT [lindex $line 1]
+  set COND [lindex $line 2]
+  set first [lindex $line 4]
+  set last [lindex $line 5]
+  puts $g "@target G0.S$series"
+  if {$ErrorBars} {
+    puts $g "@type xydy"
+    for {set i $first} {$i <= $last} {incr i} {
+      if ![info exists Value($EXPT.$COND.$i)] {set Value($EXPT.$COND.$i) 0}
+      if ![info exists StdErr($EXPT.$COND.$i)] {set StdErr($EXPT.$COND.$i) 0}
+      puts $g "\t$i\t$Value($EXPT.$COND.$i)\t$StdErr($EXPT.$COND.$i)"
+    }
+  } else {
+    puts $g "@type xy"
+    for {set i $first} {$i <= $last} {incr i} {
+      puts $g "\t$i\t$Value($EXPT.$COND.$i)"
+    }
+  }
+}
+
+### Close the graph file
+
+close $g
+
+### Call xmgrace to create a .eps file
+
+set f [open "/tmp/fixFigure.bat" "w"]
+puts $f {hardcopy device "EPS"}
+puts $f "print to \"$GraphRoot.eps\""
+puts $f "print"
+puts $f "exit"
+close $f
+
+if [catch {exec xmgrace $GraphRoot.agr -hardcopy -nosafe -batch /tmp/fixFigure.bat} msg] {
+  puts $msg
+}
+exec rm -f /tmp/fixFigure.bat

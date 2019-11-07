@@ -1,0 +1,5 @@
+set MaskJoins  1
+set MaskSpaces 1
+set BreakInterval 50
+#set Experiment stopMakingSenseReading
+#set StopMakingSenseAbortOnNo 0
