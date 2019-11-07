@@ -10,6 +10,7 @@ Linger (http://tedlab.mit.edu/~dr/Linger/) is a piece of software for gathering 
 **Linger v2.96**:
 - updated `clock clicks` to `clock clicks -milliseconds` as suggested by [Ken Nakatani (2017)](https://www.konan-u.ac.jp/hp/nakatani/lingernote.html).
 - added preference option `QuestionsFirst` to allow control of the order that ratings are collected with respect to any questions (lines with `?` and `!` headers, e.g.).
+- changed multiple choice options to be displayed vertically rather than in a grid with two columns
 
 <hr>
 [Lauren Ackerman ©2019 MIT License]
