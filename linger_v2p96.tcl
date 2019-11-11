@@ -20,6 +20,7 @@ set Verbosity 0
 # The experiment procedure:
 set Experiment   selfPacedReading
 # Other experiment types are: 
+#	selfPacedReading
 #   autoPacedReading
 #   centerSelfPacedReading
 #   centerAutoPacedReading
