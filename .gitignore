@@ -1,2 +1,3 @@
 # Ignore AQP Experiment files
 /Experiments/AQP-*
+.Rproj.user
